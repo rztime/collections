@@ -196,4 +196,16 @@ byte& Data::operator[](const uinteger idx)
     return d.data[idx];
 }
 
+byte * Data::data()
+{
+	D_D(Data);
+	return d.data.data();
+}
+
+const byte * Data::data() const
+{
+	D_D(Data);
+	return d.data.data();
+}
+
 CC_END

@@ -104,6 +104,12 @@ const constexpr integer NotFound = (integer)-1;
 #define ARRAY_CONTAINS_TYPE(objType, containsType) objType
 #define ARRAY_CONTAINS(type) Array *
 
+#if defined(__clang__)
+#define __printflike__ __printflike
+#else
+#define __printflike__(...)
+#endif
+
 CC_END
 
 #endif /* defines_h */

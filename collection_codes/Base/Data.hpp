@@ -59,6 +59,9 @@ public:
 
     byte operator[](const uinteger idx) const;
     byte& operator[](const uinteger idx);
+
+	byte *data();
+	const byte *data() const;
 };
 
 CC_END

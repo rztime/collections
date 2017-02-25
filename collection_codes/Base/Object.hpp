@@ -41,7 +41,7 @@ struct ObjectPrivate
 };
 
 #define D_D(cls) auto &d = *(cls##Private *)_d
-#define D_O(cls, o) (*(cls##Private *)(o)._d)
+#define D_O(cls, o) (*(cls##Private *)((o)._d))
 
 CC_END
 

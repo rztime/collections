@@ -6,8 +6,8 @@
 //  Copyright © 2016年 CHE. All rights reserved.
 //
 
-#ifndef String_hpp
-#define String_hpp
+#ifndef STRING_HPP
+#define STRING_HPP
 
 #include "Object.hpp"
 #include "Range.hpp"
@@ -33,12 +33,11 @@ public:
     explicit String(const string &s);
     explicit String(string &&s);
     explicit String(const Data &data);
-    explicit String(const String &other);
-    explicit String(String &&other);
+	String();
+	~String() override;
 
     shared_ptr<String> duplicate() const;
-
-    ~String() override;
+    
     uinteger length() const;
     uinteger  capacity() const;
 
@@ -58,7 +57,7 @@ public:
     Range rangeOfString(const String &aString) const;
 
     shared_ptr<String> stringByAppendingString(const String &aString) const;
-    shared_ptr<String> stringByAppendingFormat(const char *format, ...) const __printflike(2, 3);
+    shared_ptr<String> stringByAppendingFormat(const char *format, ...) const __printflike__(2, 3);
     shared_ptr<String> stringByReplacingOccurrencesOfStringWithString(const String &target, const String &replacement) const;
     shared_ptr<String> stringByReplacingCharactersInRange(Range range, const String &replacement) const;
     shared_ptr<vector<shared_ptr<String>>> componentsSeparatedByString(const String &separaotr) const;
@@ -87,7 +86,7 @@ public:
     static shared_ptr<String> stringWithBytes(const void *bytes, uinteger length);
     static shared_ptr<String> stringWithBytesNoCopy(void *bytes, uinteger  length);
     static shared_ptr<String> stringWithUTF8String(const char *nullTerminatedCString);
-    static shared_ptr<String> stringWithFormat(const char *format, ...) __printflike(1, 2);
+    static shared_ptr<String> stringWithFormat(const char *format, ...) __printflike__(1, 2);
     static shared_ptr<String> stringWithFormat(const char *format, va_list argList);
 };
 
@@ -106,7 +105,7 @@ public:
     void deleteCharactersInRange(Range range) throw();
 
     void append(const String &other);
-    void append(const char *format, ...) __printflike(2,3);
+    void append(const char *format, ...) __printflike__(2,3);
     void append(const char *nullTerminatedCString);
 
     void insert(char c, uinteger pos);
@@ -122,4 +121,4 @@ public:
 };
 
 CC_END
-#endif /* String_hpp */
+#endif /* STRING_HPP */

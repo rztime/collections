@@ -7,8 +7,6 @@
 //
 
 #include "CHException.hpp"
-#include "runtime.hpp"
-#include "tagBuf.hpp"
 #include "String.hpp"
 #include <execinfo.h>
 #include "CHLog.hpp"
@@ -39,54 +37,6 @@ static inline void exceptionHandler()
         rethrow_exception(ptr);
     }
 }
-
-__attribute__((constructor)) void load_exception_handler()
-{
-    set_unexpected(exceptionHandler);
-}
-
-struct runtimeclass(CHException)
-{
-    static struct method_list_t *methods()
-    {
-        static method_list_t method[14] = {
-            // runtime
-            {.method = {0, overloadFunc(Class(*)(std::nullptr_t),CHException::getClass), selector(getClass), __Static} },
-            {.method = {0, overloadFunc(Class(CHException::*)()const, &CHException::getClass), selector(getClass), __Member} },
-            {.method = {0, funcAddr(&CHException::allocateInstance), selector(allocateInstance), __Static} },
-            // protocol
-            {.method = {0, funcAddr(&CHException::equalTo), selector(equalTo), __Member} },
-            {.method = {0, funcAddr(&CHException::description), selector(description), __Member} },
-            // memeber method
-            {.method = {0, overloadFunc(CHException*(*)(String*, String*, id),&CHException::exceptionWithExceptionName), selector(exceptionWithExceptionName), __Static|__Overload} },
-            {.method = {0, overloadFunc(CHException*(*)(String*, const char*, ...),&CHException::exceptionWithExceptionName), selector(exceptionWithExceptionName), __Static|__Overload} },
-            {.method = {0, funcAddr(&CHException::exceptionName), selector(exceptionName), __Member} },
-            {.method = {0, funcAddr(&CHException::reason), selector(reason), __Member} },
-            {.method = {0, funcAddr(&CHException::userInfo), selector(userInfo), __Member} },
-            {.method = {0, overloadFunc(void(*)(String*,const char*,...), &CHException::raise), selector(raise), __Static|__Overload} },
-            {.method = {0, overloadFunc(void(*)(String*,const char*,va_list), &CHException::raise), selector(raise), __Static|__Overload} },
-            {.method = {0, funcAddr(&CHException::callStackSymbols), selector(callStackSymbols), __Member} },
-            {.method = {0, funcAddr(&CHException::callStackReturnAddresses), selector(callStackReturnAddresses), __Member} },
-            
-        };
-        return method;
-    }
-};
-
-static class_t ClassNamed(CHException) = {
-    0,
-    Object::getClass(nullptr),
-    selector(String),
-    runtimeclass(CHException)::methods(),
-    nullptr,
-    allocateCache(),
-    selector(^#CHException),
-    static_cast<uint32_t>((class_registerClass(&ClassNamed(CHException)), sizeof(CHException))),
-    0,
-    14
-};
-
-Implement(CHException);
 
 struct CHExceptionPrivate
 {
