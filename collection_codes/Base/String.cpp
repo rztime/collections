@@ -455,38 +455,44 @@ void MutableString::deleteCharactersInRange(Range range) throw()
     } while (0);
 }
 
-void MutableString::append(const String &other)
+MutableString& MutableString::append(const String &other)
 {
     D_D(MutableString);
     d.buf.append(D_O(MutableString, (const MutableString &)other).buf);
+    return *this;
 }
 
-void MutableString::append(const char *format, ...)
+MutableString& MutableString::append(const char *format, ...)
 {
     va_list ap;
     va_start(ap, format);
     append(format, ap);
     va_end(ap);
+    return *this;
 }
 
-void MutableString::append(const char *format, va_list argList)
+MutableString& MutableString::append(const char *format, va_list argList)
 {
     insert(length(), format, argList);
+    return *this;
 }
 
-void MutableString::append(const char *nullTerminatedCString)
+MutableString& MutableString::append(const char *nullTerminatedCString)
 {
     insert(nullTerminatedCString, length());
+    return *this;
 }
 
-void MutableString::append(const Data &data)
+MutableString& MutableString::append(const Data &data)
 {
     insert(data, length());
+    return *this;
 }
 
-void MutableString::append(char c)
+MutableString& MutableString::append(char c)
 {
     insert(c, length());
+    return *this;
 }
 
 void MutableString::insert(char c, uinteger pos)

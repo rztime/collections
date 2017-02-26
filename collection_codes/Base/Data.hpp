@@ -14,6 +14,7 @@
 #include <functional>
 #include <vector>
 #include <string>
+#include "Range.hpp"
 
 using std::vector;
 using std::string;
@@ -38,6 +39,8 @@ public:
     uinteger capacity() const;
     void clear();
 
+    void deleteBytesInRange(Range range);
+
     Data& operator=(const Data &rhs);
     Data& operator=(const std::vector<byte> &rhs);
     Data& operator=(const char *utf8String);
@@ -52,10 +55,14 @@ public:
     Data& append(const string &aString);
 
     void insert(byte b, uinteger pos);
-    void insert(byte *b, uinteger length, uinteger pos);
+    void insert(const void *b, uinteger length, uinteger pos);
     void insert(const Data &data, uinteger pos);
     void insert(const vector<byte> &data, uinteger pos);
     void insert(const string &aString, uinteger pos);
+
+    void replace(Range range, const Data &data);
+    void replace(Range range, const void *data, uinteger length);
+    void resetInRange(Range range);
 
     byte operator[](const uinteger idx) const;
     byte& operator[](const uinteger idx);

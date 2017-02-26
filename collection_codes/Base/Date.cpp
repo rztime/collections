@@ -116,7 +116,7 @@ Date Date::dateFromString(const string &dateString)
 
     struct tm validate_tm{0};
     if (memcmp(&tm, &validate_tm, sizeof(struct tm)) == 0) {
-        double count = atof(dateString.c_str());
+        double count = std::stof(dateString.c_str());
         Date date = dateEpoch();
         date += TimeInterval(count);
         return date;

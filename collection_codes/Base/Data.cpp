@@ -89,6 +89,16 @@ void Data::clear()
     d.data.clear();
 }
 
+void Data::deleteBytesInRange(Range range)
+{
+    if (range.maxRange() > length()) {
+        return;
+    }
+    D_D(Data);
+    auto s = d.data.begin() + range.location;
+    d.data.erase(s, s + range.length);
+}
+
 Data& Data::operator=(const Data &rhs)
 {
     clear();
@@ -123,33 +133,25 @@ Data& Data::operator=(const std::string &rhs)
 
 Data& Data::append(const void *bytes, uinteger length)
 {
-    D_D(Data);
-    d.data.resize(length + this->length());
-    memcpy(d.data.data(), bytes, length);
+    insert(bytes, length, this->length());
     return *this;
 }
 
 Data& Data::append(const Data &data)
 {
-    D_D(Data);
-    d.data.resize(length() + data.length());
-    memcpy(d.data.data(), D_O(Data, data).data.data(), data.length());
+    insert(data, length());
     return *this;
 }
 
 Data& Data::append(const vector<byte> &data)
 {
-    D_D(Data);
-    d.data.resize(length() + data.size());
-    memcpy(d.data.data(), data.data(), data.size());
+    insert(data, length());
     return *this;
 }
 
 Data& Data::append(const string &aString)
 {
-    D_D(Data);
-    d.data.resize(length() + aString.length());
-    memcpy(d.data.data(), &*aString.begin(), aString.length());
+    insert(aString, length());
     return *this;
 }
 
@@ -159,10 +161,10 @@ void Data::insert(byte b, uinteger pos)
     d.data.insert(d.data.begin() + pos, b);
 }
 
-void Data::insert(byte *b, uinteger length, uinteger pos)
+void Data::insert(const void *b, uinteger length, uinteger pos)
 {
     D_D(Data);
-    d.data.insert(d.data.begin() + pos, b, b + length);
+    d.data.insert(d.data.begin() + pos, *(byte *)b, *((const byte *)b + length));
 }
 
 void Data::insert(const Data &data, uinteger pos)
@@ -183,6 +185,33 @@ void Data::insert(const string &aString, uinteger pos)
 {
     D_D(Data);
     d.data.insert(d.data.begin() + pos, aString.begin(), aString.end());
+}
+
+void Data::replace(Range range, const Data &data)
+{
+    replace(range, data.data(), data.length());
+}
+
+void Data::replace(Range range, const void *data, uinteger length)
+{
+    if (range.maxRange() > this->length()) {
+        return;
+    }
+    deleteBytesInRange(range);
+    insert(data, length, range.location);
+}
+
+void Data::resetInRange(Range range)
+{
+    if (range.maxRange() > length()) {
+        return;
+    }
+    D_D(Data);
+    auto s = d.data.begin() + range.location;
+    auto e = d.data.begin() + range.maxRange();
+    while (s < e) {
+        *++s = 0;
+    }
 }
 
 byte Data::operator[](const uinteger idx) const

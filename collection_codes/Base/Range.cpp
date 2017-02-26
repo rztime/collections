@@ -11,7 +11,7 @@
 
 CC_BEGIN
 
-extern std::shared_ptr<String> showRange(Range range)
+std::shared_ptr<String> showRange(Range range)
 {
     auto str = String::stringWithFormat("{.location=%llu, .length=%llu}",
                                         range.location, range.length);

@@ -43,10 +43,10 @@
 		FB8B6A5F1E60017F00127744 /* cast.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A4C1E60017F00127744 /* cast.cpp */; };
 		FB8B6A621E60017F00127744 /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A501E60017F00127744 /* Data.cpp */; };
 		FB8B6A631E60017F00127744 /* Data.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A501E60017F00127744 /* Data.cpp */; };
-		FB8B6A641E60017F00127744 /* CHException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A521E60017F00127744 /* CHException.cpp */; };
-		FB8B6A651E60017F00127744 /* CHException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A521E60017F00127744 /* CHException.cpp */; };
-		FB8B6A661E60017F00127744 /* CHLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A541E60017F00127744 /* CHLog.cpp */; };
-		FB8B6A671E60017F00127744 /* CHLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A541E60017F00127744 /* CHLog.cpp */; };
+		FB8B6A641E60017F00127744 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A521E60017F00127744 /* Exception.cpp */; };
+		FB8B6A651E60017F00127744 /* Exception.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A521E60017F00127744 /* Exception.cpp */; };
+		FB8B6A661E60017F00127744 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A541E60017F00127744 /* log.cpp */; };
+		FB8B6A671E60017F00127744 /* log.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A541E60017F00127744 /* log.cpp */; };
 		FB8B6A681E60017F00127744 /* Number.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A561E60017F00127744 /* Number.cpp */; };
 		FB8B6A691E60017F00127744 /* Number.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A561E60017F00127744 /* Number.cpp */; };
 		FB8B6A6C1E60017F00127744 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A5A1E60017F00127744 /* Range.cpp */; };
@@ -110,26 +110,26 @@
 		FB8B6A3D1E5FE23900127744 /* Variant.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Variant.hpp; sourceTree = "<group>"; };
 		FB8B6A441E5FFB6600127744 /* Object.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Object.cpp; sourceTree = "<group>"; };
 		FB8B6A451E5FFB6600127744 /* Object.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Object.hpp; sourceTree = "<group>"; };
-		FB8B6A481E5FFD3800127744 /* TaggedPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaggedPointer.cpp; sourceTree = "<group>"; };
-		FB8B6A491E5FFD3800127744 /* TaggedPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaggedPointer.h; sourceTree = "<group>"; };
+		FB8B6A481E5FFD3800127744 /* TaggedPointer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = TaggedPointer.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		FB8B6A491E5FFD3800127744 /* TaggedPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = TaggedPointer.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FB8B6A4C1E60017F00127744 /* cast.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cast.cpp; sourceTree = "<group>"; };
 		FB8B6A4D1E60017F00127744 /* cast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = cast.hpp; sourceTree = "<group>"; };
 		FB8B6A501E60017F00127744 /* Data.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Data.cpp; sourceTree = "<group>"; };
 		FB8B6A511E60017F00127744 /* Data.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Data.hpp; sourceTree = "<group>"; };
-		FB8B6A521E60017F00127744 /* CHException.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHException.cpp; sourceTree = "<group>"; };
-		FB8B6A531E60017F00127744 /* CHException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CHException.hpp; sourceTree = "<group>"; };
-		FB8B6A541E60017F00127744 /* CHLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHLog.cpp; sourceTree = "<group>"; };
-		FB8B6A551E60017F00127744 /* CHLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CHLog.hpp; sourceTree = "<group>"; };
+		FB8B6A521E60017F00127744 /* Exception.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Exception.cpp; sourceTree = "<group>"; };
+		FB8B6A531E60017F00127744 /* Exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = Exception.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		FB8B6A541E60017F00127744 /* log.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = log.cpp; sourceTree = "<group>"; };
+		FB8B6A551E60017F00127744 /* log.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = log.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB8B6A561E60017F00127744 /* Number.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Number.cpp; sourceTree = "<group>"; };
 		FB8B6A571E60017F00127744 /* Number.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Number.hpp; sourceTree = "<group>"; };
-		FB8B6A5A1E60017F00127744 /* Range.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Range.cpp; sourceTree = "<group>"; };
-		FB8B6A5B1E60017F00127744 /* Range.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Range.hpp; sourceTree = "<group>"; };
+		FB8B6A5A1E60017F00127744 /* Range.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; lineEnding = 0; path = Range.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
+		FB8B6A5B1E60017F00127744 /* Range.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = Range.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB8B6A5C1E60017F00127744 /* String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cpp; sourceTree = "<group>"; };
 		FB8B6A5D1E60017F00127744 /* String.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = String.hpp; sourceTree = "<group>"; };
 		FB8B6A701E60023300127744 /* tprintf.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tprintf.cpp; sourceTree = "<group>"; };
-		FB8B6A711E60023300127744 /* tprintf.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tprintf.hpp; sourceTree = "<group>"; };
+		FB8B6A711E60023300127744 /* tprintf.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = tprintf.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB8B6A741E60023E00127744 /* Algorithm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Algorithm.cpp; sourceTree = "<group>"; };
-		FB8B6A751E60023E00127744 /* Algorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Algorithm.hpp; sourceTree = "<group>"; };
+		FB8B6A751E60023E00127744 /* Algorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; lineEnding = 0; path = Algorithm.hpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		FB8B6A781E60045300127744 /* types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -266,10 +266,10 @@
 				FB8B6A4D1E60017F00127744 /* cast.hpp */,
 				FB8B6A501E60017F00127744 /* Data.cpp */,
 				FB8B6A511E60017F00127744 /* Data.hpp */,
-				FB8B6A521E60017F00127744 /* CHException.cpp */,
-				FB8B6A531E60017F00127744 /* CHException.hpp */,
-				FB8B6A541E60017F00127744 /* CHLog.cpp */,
-				FB8B6A551E60017F00127744 /* CHLog.hpp */,
+				FB8B6A521E60017F00127744 /* Exception.cpp */,
+				FB8B6A531E60017F00127744 /* Exception.hpp */,
+				FB8B6A541E60017F00127744 /* log.cpp */,
+				FB8B6A551E60017F00127744 /* log.hpp */,
 				FB8B6A561E60017F00127744 /* Number.cpp */,
 				FB8B6A571E60017F00127744 /* Number.hpp */,
 				FB8B6A5A1E60017F00127744 /* Range.cpp */,
@@ -404,9 +404,9 @@
 				FB8B69DF1E5FD75000127744 /* AppDelegate.m in Sources */,
 				FB8B6A681E60017F00127744 /* Number.cpp in Sources */,
 				FB8B69DC1E5FD75000127744 /* main.mm in Sources */,
-				FB8B6A641E60017F00127744 /* CHException.cpp in Sources */,
+				FB8B6A641E60017F00127744 /* Exception.cpp in Sources */,
 				FB8B6A0D1E5FD81000127744 /* FMStatement.cpp in Sources */,
-				FB8B6A661E60017F00127744 /* CHLog.cpp in Sources */,
+				FB8B6A661E60017F00127744 /* log.cpp in Sources */,
 				FB8B6A0C1E5FD81000127744 /* FMResultSet.cpp in Sources */,
 				FB8B6A0A1E5FD81000127744 /* FMDatabase.cpp in Sources */,
 				FB8B6A4A1E5FFD3800127744 /* TaggedPointer.cpp in Sources */,
@@ -439,9 +439,9 @@
 				FB8B6A311E5FD90400127744 /* FMDatabase.cpp in Sources */,
 				FB8B6A771E60023E00127744 /* Algorithm.cpp in Sources */,
 				FB8B6A6D1E60017F00127744 /* Range.cpp in Sources */,
-				FB8B6A651E60017F00127744 /* CHException.cpp in Sources */,
+				FB8B6A651E60017F00127744 /* Exception.cpp in Sources */,
 				FB8B6A4B1E5FFD3800127744 /* TaggedPointer.cpp in Sources */,
-				FB8B6A671E60017F00127744 /* CHLog.cpp in Sources */,
+				FB8B6A671E60017F00127744 /* log.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

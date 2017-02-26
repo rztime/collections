@@ -14,11 +14,11 @@
 
 CC_BEGIN
 
-extern uinteger tprintf(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
+CC_EXTERN uinteger tprintf(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
 
-extern uinteger tprintf_error(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
+CC_EXTERN uinteger tprintf_error(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
 
-extern uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_list ap, uint32_t objectOutputFlag);
+CC_EXTERN uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_list ap, uint32_t objectOutputFlag);
 
 #define OUTPUT_FLAG_LOG (uint32_t)1
 #define OUTPUT_FLAG_DESCRIPTION (uint32_t)2

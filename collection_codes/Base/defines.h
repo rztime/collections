@@ -6,10 +6,22 @@
 //  Copyright © 2017年 CHE. All rights reserved.
 //
 
-#ifndef defines_h
-#define defines_h
+#ifndef DEFINES_H
+#define DEFINES_H
 
 #include <type_traits>
+#include <vector>
+#include <unordered_map>
+#include <string>
+#include <chrono>
+#include <memory>
+#include <cstdlib>
+
+using std::vector;
+using std::unordered_map;
+using std::string;
+using std::shared_ptr;
+using std::weak_ptr;
 
 #ifndef NESPEC
 #define NESPEC collection_codes
@@ -29,6 +41,9 @@
 #endif // !_CC
 
 CC_BEGIN
+
+using namespace std::chrono;
+using TimeInterval = std::chrono::duration<double>;
 
 #ifndef CLASS_TAGGEDPOINTER_AVAILABLE
 #define CLASS_TAGGEDPOINTER_AVAILABLE
@@ -101,9 +116,6 @@ using uinteger = unsigned int;
 
 const constexpr integer NotFound = (integer)-1;
 
-#define ARRAY_CONTAINS_TYPE(objType, containsType) objType
-#define ARRAY_CONTAINS(type) Array *
-
 #if defined(__clang__)
 #define __printflike__ __printflike
 #else
@@ -112,4 +124,4 @@ const constexpr integer NotFound = (integer)-1;
 
 CC_END
 
-#endif /* defines_h */
+#endif /* DEFINES_H */

@@ -27,7 +27,6 @@
 #include <memory>
 #include <string>
 #include <chrono>
-#include <cassert>
 
 using std::string;
 using std::vector;

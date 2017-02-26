@@ -36,7 +36,7 @@ typedef struct Range {
 
 } Range;
 
-extern std::shared_ptr<String> showRange(Range range);
+//CC_EXTERN std::shared_ptr<String> showRange(Range range);
 
 CC_END
 

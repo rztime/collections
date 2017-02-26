@@ -109,12 +109,12 @@ public:
 
     void deleteCharactersInRange(Range range) throw();
 
-    void append(const String &other);
-    void append(const char *format, ...) __printflike__(2,3);
-    void append(const char *format, va_list argList);
-    void append(const char *nullTerminatedCString);
-    void append(const Data &data);
-    void append(char c);
+    MutableString& append(const String &other);
+    MutableString& append(const char *format, ...) __printflike__(2,3);
+    MutableString& append(const char *format, va_list argList);
+    MutableString& append(const char *nullTerminatedCString);
+    MutableString& append(const Data &data);
+    MutableString& append(char c);
 
     void insert(char c, uinteger pos);
     void insert(const char *nullTerminatedCString, uinteger pos);
@@ -130,5 +130,10 @@ public:
     void replaceCharactersInRangeWithString(Range range, const String &aString);
 };
 
+#ifndef s
+#define s(cstr) String::stringWithUTF8String(cstr)
+#endif
+
 CC_END
+
 #endif /* STRING_HPP */
