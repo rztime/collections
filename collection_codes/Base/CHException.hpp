@@ -10,7 +10,6 @@
 #define _exception_hpp
 
 #include <stdarg.h>
-
 #include "Object.hpp"
 
 class String;

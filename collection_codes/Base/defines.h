@@ -86,7 +86,7 @@ using byte = unsigned char;
 
 #if __PL64__
 using IMP = unsigned long long;
-using uintptr_t = unsigned long;
+using uintptr_t = unsigned long long;
 
 using integer = long long;
 using uinteger = unsigned long long;

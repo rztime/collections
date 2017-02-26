@@ -100,12 +100,12 @@ static char *tlonglong_to_hexstring(char *buf, unsigned long long u, int len, ui
     return &buf[pos];
 }
 
-uint64_t tprintf(const char *format, ...)
+uinteger tprintf(const char *format, ...)
 {
     va_list ap;
     va_start(ap, format);
     char *str = nullptr;
-    uint64_t n = tprintf_c(str, nullptr, format, ap, OUTPUT_FLAG_LOG);
+    uinteger n = tprintf_c(str, nullptr, format, ap, OUTPUT_FLAG_LOG);
     va_end(ap);
     puts(str);
     fflush(stdout);
@@ -113,12 +113,12 @@ uint64_t tprintf(const char *format, ...)
     return n;
 }
 
-uint64_t tprintf_error(const char *format, ...)
+uinteger tprintf_error(const char *format, ...)
 {
     va_list ap;
     va_start(ap, format);
     char *str = nullptr;
-    uint64_t n = tprintf_c(str, nullptr, format, ap, OUTPUT_FLAG_LOG);
+    uinteger n = tprintf_c(str, nullptr, format, ap, OUTPUT_FLAG_LOG);
     va_end(ap);
     fprintf(stderr, "%s", str);
     fflush(stderr);
@@ -126,7 +126,7 @@ uint64_t tprintf_error(const char *format, ...)
     return n;
 }
 
-uint64_t tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_list ap, uint32_t objectOutputFlag)
+uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_list ap, uint32_t objectOutputFlag)
 {
     char c;
     unsigned char uc;

@@ -6,22 +6,22 @@
 //  Copyright © 2016年 CHE. All rights reserved.
 //
 
-#ifndef tprintf_hpp
-#define tprintf_hpp
+#ifndef TPRINTF_HPP
+#define TPRINTF_HPP
 
 #include "defines.h"
 #include <stdarg.h>
 
 CC_BEGIN
 
-extern uint64_t tprintf(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
+extern uinteger tprintf(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
 
-extern uint64_t tprintf_error(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
+extern uinteger tprintf_error(const char *format, ...) __attribute__((__format__ (__printf__, 1, 2)));
 
-extern uint64_t tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_list ap, uint32_t objectOutputFlag);
+extern uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_list ap, uint32_t objectOutputFlag);
 
 #define OUTPUT_FLAG_LOG (uint32_t)1
 #define OUTPUT_FLAG_DESCRIPTION (uint32_t)2
 
 CC_END
-#endif /* tprintf_hpp */
+#endif /* TPRINTF_HPP */

@@ -11,10 +11,10 @@
 
 CC_BEGIN
 
-extern String *showRange(Range range)
+extern std::shared_ptr<String> showRange(Range range)
 {
-    String *str = String::stringWithFormat("{.location=%u, .length=%u}",
-                                               range.location, range.length);
+    auto str = String::stringWithFormat("{.location=%llu, .length=%llu}",
+                                        range.location, range.length);
     return str;
 }
 

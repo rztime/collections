@@ -11,6 +11,8 @@
 #include <stdlib.h>
 using namespace std;
 
+CC_BEGIN
+
 namespace StringSearch {
     static inline void _computeGoodSubstringShift(const char *needle, int needleLength, unsigned int shift[], unsigned int suff[])
     {
@@ -155,14 +157,14 @@ tmp = (buf)[i]; \
         }
 
         if(searchRange.length < needleLength || fullHaystackLength == 0 || needleLength == 0) {
-            return CHMakeRange(CHNotFound, 0);
+            return Range(NotFound, 0);
         }
 
         const char *haystack = fullHaystack + searchRange.location;
-        const char *searchResult = __CHDataSearchBoyerMoore(data, haystack, searchRange.length, needle, needleLength, false);
-        uint32_t resultLocation = (searchResult == NULL) ? CHNotFound : searchRange.location + (uint32_t)(searchResult - haystack);
+        const char *searchResult = __CHDataSearchBoyerMoore(data, haystack, (int)searchRange.length, needle, needleLength, false);
+        uint32_t resultLocation = (searchResult == NULL) ? NotFound : (uint32_t)searchRange.location + (uint32_t)(searchResult - haystack);
 
-        return CHMakeRange(resultLocation, resultLocation == CHNotFound ? 0: needleLength);
+        return Range(resultLocation, (integer)resultLocation == NotFound ? 0: needleLength);
     }
 
     static inline Range _CHDataFindByteUsually(const char *src,
@@ -171,10 +173,10 @@ tmp = (buf)[i]; \
                                                  uint32_t patternLength)
     {
         if (srcLength < patternLength || !src) {
-            return CHMakeRange(CHNotFound, 0);
+            return Range(NotFound, 0);
         }
         if (!pattern || patternLength == 0) {
-            return CHMakeRange(0, 0);
+            return Range(0, 0);
         }
         const char *buf = src;
         const char *srcp = nullptr;
@@ -186,12 +188,12 @@ tmp = (buf)[i]; \
             patp = pattern;
             do {
                 if (patp == patEnd) {
-                    return CHMakeRange((uint32_t)(buf - src), patternLength);
+                    return Range((uint32_t)(buf - src), patternLength);
                 }
             } while (*srcp++ == *patp++);
             ++buf;
         }
-        return CHMakeRange(CHNotFound, 0);
+        return Range(NotFound, 0);
     }
 
     static inline void searchAllOfOccurrencesOfString(const char *haystack, int haystackLength, const char *needle, int needleLength, vector<Range> &result)
@@ -219,7 +221,7 @@ tmp = (buf)[i]; \
         const char *const end_haystack = haystack + haystackLength;
         scan_needle = needle + needleLength - 1;
         scan_haystack = haystack + needleLength - 1;
-        Range searchResultRange{.location = 0, .length = (uint32_t)needleLength};
+        Range searchResultRange(0, needleLength);
         while (scan_haystack < end_haystack) {
             if (*scan_haystack == *scan_needle) {
                 scan_haystack--;
@@ -244,7 +246,7 @@ tmp = (buf)[i]; \
 
 Range BMContainsString(const char *src, uint32_t srcLen, const char *pattern, uint32_t patternLength)
 {
-    return StringSearch::_CHDataFindBytes(src, srcLen, pattern, patternLength, CHMakeRange(0, srcLen));
+    return StringSearch::_CHDataFindBytes(src, srcLen, pattern, patternLength, Range(0, srcLen));
 }
 
 Range containsStringUsually(const char *src, uint32_t srcLen, const char *pattern, uint32_t patternLength)
@@ -259,3 +261,5 @@ void searchAllOfOccurrencesOfString(const char *src, uint32_t srcLen, const char
     }
     StringSearch::searchAllOfOccurrencesOfString(src, srcLen, pattern, patternLength, result);
 }
+
+CC_END

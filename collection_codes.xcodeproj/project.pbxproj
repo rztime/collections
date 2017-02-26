@@ -47,8 +47,8 @@
 		FB8B6A651E60017F00127744 /* CHException.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A521E60017F00127744 /* CHException.cpp */; };
 		FB8B6A661E60017F00127744 /* CHLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A541E60017F00127744 /* CHLog.cpp */; };
 		FB8B6A671E60017F00127744 /* CHLog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A541E60017F00127744 /* CHLog.cpp */; };
-		FB8B6A681E60017F00127744 /* CHNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A561E60017F00127744 /* CHNumber.cpp */; };
-		FB8B6A691E60017F00127744 /* CHNumber.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A561E60017F00127744 /* CHNumber.cpp */; };
+		FB8B6A681E60017F00127744 /* Number.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A561E60017F00127744 /* Number.cpp */; };
+		FB8B6A691E60017F00127744 /* Number.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A561E60017F00127744 /* Number.cpp */; };
 		FB8B6A6C1E60017F00127744 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A5A1E60017F00127744 /* Range.cpp */; };
 		FB8B6A6D1E60017F00127744 /* Range.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A5A1E60017F00127744 /* Range.cpp */; };
 		FB8B6A6E1E60017F00127744 /* String.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A5C1E60017F00127744 /* String.cpp */; };
@@ -120,8 +120,8 @@
 		FB8B6A531E60017F00127744 /* CHException.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CHException.hpp; sourceTree = "<group>"; };
 		FB8B6A541E60017F00127744 /* CHLog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHLog.cpp; sourceTree = "<group>"; };
 		FB8B6A551E60017F00127744 /* CHLog.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CHLog.hpp; sourceTree = "<group>"; };
-		FB8B6A561E60017F00127744 /* CHNumber.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CHNumber.cpp; sourceTree = "<group>"; };
-		FB8B6A571E60017F00127744 /* CHNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CHNumber.hpp; sourceTree = "<group>"; };
+		FB8B6A561E60017F00127744 /* Number.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Number.cpp; sourceTree = "<group>"; };
+		FB8B6A571E60017F00127744 /* Number.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Number.hpp; sourceTree = "<group>"; };
 		FB8B6A5A1E60017F00127744 /* Range.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Range.cpp; sourceTree = "<group>"; };
 		FB8B6A5B1E60017F00127744 /* Range.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Range.hpp; sourceTree = "<group>"; };
 		FB8B6A5C1E60017F00127744 /* String.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = String.cpp; sourceTree = "<group>"; };
@@ -270,8 +270,8 @@
 				FB8B6A531E60017F00127744 /* CHException.hpp */,
 				FB8B6A541E60017F00127744 /* CHLog.cpp */,
 				FB8B6A551E60017F00127744 /* CHLog.hpp */,
-				FB8B6A561E60017F00127744 /* CHNumber.cpp */,
-				FB8B6A571E60017F00127744 /* CHNumber.hpp */,
+				FB8B6A561E60017F00127744 /* Number.cpp */,
+				FB8B6A571E60017F00127744 /* Number.hpp */,
 				FB8B6A5A1E60017F00127744 /* Range.cpp */,
 				FB8B6A5B1E60017F00127744 /* Range.hpp */,
 				FB8B6A5C1E60017F00127744 /* String.cpp */,
@@ -402,7 +402,7 @@
 				FB8B6A5E1E60017F00127744 /* cast.cpp in Sources */,
 				FB8B6A3E1E5FE23900127744 /* Date.cpp in Sources */,
 				FB8B69DF1E5FD75000127744 /* AppDelegate.m in Sources */,
-				FB8B6A681E60017F00127744 /* CHNumber.cpp in Sources */,
+				FB8B6A681E60017F00127744 /* Number.cpp in Sources */,
 				FB8B69DC1E5FD75000127744 /* main.mm in Sources */,
 				FB8B6A641E60017F00127744 /* CHException.cpp in Sources */,
 				FB8B6A0D1E5FD81000127744 /* FMStatement.cpp in Sources */,
@@ -425,7 +425,7 @@
 				FB8B6A411E5FE23900127744 /* Error.cpp in Sources */,
 				FB8B6A1B1E5FD8C800127744 /* FMDBTests.m in Sources */,
 				FB8B6A2B1E5FD8E200127744 /* FMDatabaseTests.mm in Sources */,
-				FB8B6A691E60017F00127744 /* CHNumber.cpp in Sources */,
+				FB8B6A691E60017F00127744 /* Number.cpp in Sources */,
 				FB8B6A6F1E60017F00127744 /* String.cpp in Sources */,
 				FB8B6A471E5FFB6600127744 /* Object.cpp in Sources */,
 				FB8B6A341E5FD90400127744 /* FMStatement.cpp in Sources */,
@@ -634,6 +634,7 @@
 				FB8B69F01E5FD75000127744 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FB8B6A1F1E5FD8C800127744 /* Build configuration list for PBXNativeTarget "FMDBTests" */ = {
 			isa = XCConfigurationList;
@@ -642,6 +643,7 @@
 				FB8B6A211E5FD8C800127744 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

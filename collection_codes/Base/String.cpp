@@ -13,7 +13,6 @@
 #include "tprintf.hpp"
 #include "Algorithm.hpp"
 #include "Data.hpp"
-#include "CHException.hpp"
 #include <algorithm>
 
 using namespace std;
@@ -36,40 +35,54 @@ struct StringPrivate : ObjectPrivate
 	{}
 
 	StringPrivate(string &&s)
-		:buf(s)
+    :buf(s)
 	{}
 
 	StringPrivate(const Data &data)
-	:buf((char *)data.data(), (char *)data.data() + data.length)
+	:buf((char *)data.data(), (char *)data.data() + data.length())
 	{}
+
+    StringPrivate(const void *bytes, uinteger length)
+    :buf((char *)bytes, length)
+    {}
 
 	StringPrivate() {}
 
 	string buf;
 };
 
+#define TAGGED_STRING_POINTER_RETURN(obj) reinterpret_cast<const char *>(((uintptr_t)obj ^ TAGGED_POINTER_STRING_FLAG) >> 1)
+
 String::String(const char * s)
-	: Object(new StringPrivate(s))
-{
-}
+:Object(new StringPrivate(s))
+{}
+
+String::String(const void *bytes, uinteger length)
+:Object(new StringPrivate(bytes, length))
+{}
 
 String::String(const string & s)
-	: Object(new StringPrivate(s))
-{
-}
+:Object(new StringPrivate(s))
+{}
 
 String::String(string && s)
-	: Object(new StringPrivate(std::move(s)))
-{
-}
+:Object(new StringPrivate(std::move(s)))
+{}
 
 String::String(const Data & data)
-	: Object(new StringPrivate(data))
-{
-}
+:Object(new StringPrivate(data))
+{}
 
-String::String() 
-: Object(new StringPrivate)
+String::String(const String &other)
+:Object(new StringPrivate(D_O(String, other).buf))
+{}
+
+String::String(String &&other)
+:Object(new StringPrivate(std::move(D_O(String, other).buf)))
+{}
+
+String::String()
+:Object(new StringPrivate)
 {}
 
 String::~String()
@@ -169,6 +182,389 @@ bool String::hasSuffix(const String & str) const
 	return length == 0;
 }
 
-#define TAGGED_STRING_POINTER_RETURN(obj) reinterpret_cast<const char *>(((uintptr_t)obj ^ TAGGED_POINTER_STRING_FLAG) >> 1)
+bool String::containsString(const String &aString) const
+{
+    return rangeOfString(aString).location != NotFound;
+}
+
+Range String::rangeOfString(const String &aString) const
+{
+    D_D(String);
+    auto s1 = d.buf.data();
+    auto s2 = D_O(String, aString).buf.data();
+    return BMContainsString(s1, (uint32_t)d.buf.length(), s2, (uint32_t)D_O(String, aString).buf.length());
+}
+
+shared_ptr<String> String::stringByAppendingString(const String &aString) const
+{
+    auto copy = duplicate();
+    D_O(String, *copy).buf += D_O(String, aString).buf;
+    return copy;
+}
+
+shared_ptr<String> String::stringByAppendingFormat(const char *format, ...) const
+{
+    auto copy = duplicate();
+    do {
+        if (!format || !*format) {
+            break;
+        }
+        va_list ap;
+        va_start(ap, format);
+        char *buffer = nullptr;
+        uint32_t capacity = 0;
+        uint32_t length = (uint32_t)tprintf_c(buffer, &capacity, format, ap, OUTPUT_FLAG_DESCRIPTION);
+        va_end(ap);
+        D_O(String, *copy).buf.append(buffer, length);
+        free(buffer);
+        buffer = nullptr;
+    } while (0);
+    return copy;
+}
+
+shared_ptr<String> String::stringByReplacingOccurrencesOfStringWithString(const String &target, const String &replacement) const
+{
+    auto copy = duplicate();
+    do {
+        vector<Range> result;
+        D_D(String);
+        auto &targetString = D_O(String, target).buf;
+        searchAllOfOccurrencesOfString(d.buf.data(),
+                                       (uint32_t)d.buf.length(),
+                                       targetString.data(),
+                                       (uint32_t)target.length(),
+                                       result);
+        if (result.empty()) {
+            break;
+        }
+        auto &buf = D_O(String, *copy).buf;
+        for (auto &range : result) {
+            buf.replace(range.location, range.length, D_O(String, replacement).buf);
+        }
+    } while (0);
+    return copy;
+}
+
+shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const String &replacement) const
+{
+    auto copy = duplicate();
+    do {
+        D_D(String);
+        if (range.maxRange() > d.buf.length()) {
+            // TODO: 抛出异常
+            break;
+        }
+        auto &buf = D_O(String, *copy).buf;
+        buf.replace(range.location, range.length, D_O(String, replacement).buf);
+    } while (0);
+    return copy;
+}
+
+shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const String &separaotr) const
+{
+    auto result = make_shared<vector<shared_ptr<String>>>(0);
+    D_D(String);
+    vector<Range> ranges;
+    searchAllOfOccurrencesOfString(d.buf.data(),
+                                   (uint32_t)d.buf.length(),
+                                   D_O(String, separaotr).buf.data(),
+                                   (uint32_t)D_O(String, separaotr).buf.length(), ranges);
+    for (auto &range : ranges) {
+        result->push_back(this->substring(range));
+    }
+    return result;
+}
+
+double String::doubleValue() const
+{
+    D_D(String);
+    return std::stod(d.buf);
+}
+
+float String::floatValue() const
+{
+    D_D(String);
+    return std::stof(d.buf);
+}
+
+int String::intValue() const
+{
+    D_D(String);
+    return std::stoi(d.buf);
+}
+
+long String::longValue() const
+{
+    D_D(String);
+    return std::stol(d.buf);
+}
+
+long long String::longLongValue() const
+{
+    D_D(String);
+    return std::stoll(d.buf);
+}
+
+bool String::boolValue() const
+{
+    D_D(String);
+    return std::stod(d.buf);
+}
+
+integer String::integerValue() const
+{
+    D_D(String);
+    return
+#if __PL64__
+    std::stoll(d.buf);
+#else
+    std::stoi(d.buf);
+#endif
+}
+
+uinteger String::unsignedIntegerValue() const
+{
+    D_D(String);
+    return
+#if __PL64__
+    std::stoull(d.buf);
+#else
+    (uint32_t)std::stoi(d.buf);
+#endif
+}
+
+shared_ptr<String> String::uppercaseString() const
+{
+    auto copy = duplicate();
+    auto &s = D_O(String, *copy).buf;
+    std::transform(s.begin(), s.end(), s.begin(), std::toupper);
+    return copy;
+}
+
+shared_ptr<String> String::lowercaseString() const
+{
+    auto copy = duplicate();
+    auto &s = D_O(String, *copy).buf;
+    std::transform(s.begin(), s.end(), s.begin(), std::tolower);
+    return copy;
+}
+
+shared_ptr<Data> String::dataUsingEncoding() const
+{
+    D_D(String);
+    auto data = make_shared<Data>(d.buf);
+    return data;
+}
+
+uinteger String::getBytes(void *buffer, uinteger bufferLength) const
+{
+    parameterAssert(buffer != nullptr);
+    D_D(String);
+    uinteger length = std::min(bufferLength, (uinteger)d.buf.length());
+    memcpy(buffer, d.buf.data(), length);
+    return length;
+}
+
+// creation
+shared_ptr<String> String::stringWithString(const String &other)
+{
+    return other.duplicate();
+}
+
+shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length)
+{
+    return make_shared<String>(bytes, length);
+}
+
+shared_ptr<String> String::stringWithUTF8String(const char *nullTerminatedCString)
+{
+    return make_shared<String>(nullTerminatedCString);
+}
+
+shared_ptr<String> String::stringWithFormat(const char *format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    auto str = stringWithFormat(format, ap);
+    va_end(ap);
+    return str;
+}
+
+shared_ptr<String> String::stringWithFormat(const char *format, va_list argList)
+{
+    char *buffer = nullptr;
+    uint32_t capacity = 0;
+    uinteger length = tprintf_c(buffer, &capacity, format, argList, OUTPUT_FLAG_DESCRIPTION);
+    auto str = make_shared<String>(buffer, length);
+    free(buffer);
+    return str;
+}
+
+// MutableString
+
+struct MutableStringPrivate : StringPrivate {};
+
+MutableString::MutableString()
+:String()
+{}
+
+MutableString::MutableString(const char *s)
+:String(s)
+{}
+
+MutableString::MutableString(const void *bytes, uinteger length)
+:String(bytes, length)
+{}
+
+MutableString::MutableString(const string &s)
+:String(s)
+{}
+
+MutableString::MutableString(string &&s)
+:String(std::move(s))
+{}
+
+MutableString::MutableString(const Data &data)
+:String(data)
+{}
+
+MutableString::MutableString(const String &other)
+:String(other)
+{}
+
+MutableString::MutableString(String &&other)
+:String(std::move(other))
+{}
+
+MutableString::MutableString(const MutableString &other)
+:String(other)
+{}
+
+MutableString::MutableString(MutableString &&other)
+:String(std::move(other))
+{}
+
+void MutableString::deleteCharactersInRange(Range range) throw()
+{
+    do {
+        if (range.maxRange() > length()) {
+            break;
+        }
+        D_D(MutableString);
+        d.buf.erase(range.location, range.length);
+    } while (0);
+}
+
+void MutableString::append(const String &other)
+{
+    D_D(MutableString);
+    d.buf.append(D_O(MutableString, (const MutableString &)other).buf);
+}
+
+void MutableString::append(const char *format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    append(format, ap);
+    va_end(ap);
+}
+
+void MutableString::append(const char *format, va_list argList)
+{
+    insert(length(), format, argList);
+}
+
+void MutableString::append(const char *nullTerminatedCString)
+{
+    insert(nullTerminatedCString, length());
+}
+
+void MutableString::append(const Data &data)
+{
+    insert(data, length());
+}
+
+void MutableString::append(char c)
+{
+    insert(c, length());
+}
+
+void MutableString::insert(char c, uinteger pos)
+{
+    D_D(MutableString);
+    d.buf.insert(pos, 1, c);
+}
+
+void MutableString::insert(const char *nullTerminatedCString, uinteger pos)
+{
+    D_D(MutableString);
+    d.buf.insert(pos, nullTerminatedCString);
+}
+
+void MutableString::insert(const byte *b, uinteger length, uinteger pos)
+{
+    D_D(MutableString);
+    d.buf.insert(pos, (const char *)b, length);
+}
+
+void MutableString::insert(const Data &data, uinteger pos)
+{
+    D_D(MutableString);
+    d.buf.insert(d.buf.begin() + pos, data.data(), data.data() + data.length());
+}
+
+void MutableString::insert(const String &aString, uinteger pos)
+{
+    D_D(MutableString);
+    d.buf.insert(pos, D_O(MutableString, (const MutableString &)aString).buf);
+}
+
+void MutableString::insert(uinteger pos, const char *format, ...)
+{
+    va_list ap;
+    va_start(ap, format);
+    insert(pos, format, ap);
+    va_end(ap);
+}
+
+void MutableString::insert(uinteger pos, const char *format, va_list argList)
+{
+    char *buffer = nullptr;
+    uint32_t capacity = 0;
+    uinteger length = tprintf_c(buffer, &capacity, format, argList, OUTPUT_FLAG_DESCRIPTION);
+    D_D(MutableString);
+    d.buf.insert(pos, buffer, length);
+    free(buffer);
+}
+
+void MutableString::clear()
+{
+    D_D(MutableString);
+    d.buf.clear();
+}
+
+void MutableString::replaceOccurrencesOfStringWithString(const String &target, const String &replacement)
+{
+    vector<Range> result;
+    D_D(MutableString);
+    auto &targetString = D_O(MutableString, (const MutableString &)target).buf;
+    searchAllOfOccurrencesOfString(d.buf.data(),
+                                   (uint32_t)d.buf.length(),
+                                   targetString.data(),
+                                   (uint32_t)target.length(),
+                                   result);
+    for (auto &range : result) {
+        d.buf.replace(range.location, range.length, D_O(MutableString, (const MutableString &)replacement).buf);
+    }
+}
+
+void MutableString::replaceCharactersInRangeWithString(Range range, const String &aString)
+{
+    D_D(MutableString);
+    if (range.maxRange() > d.buf.length()) {
+        // TODO: 抛出异常
+    }
+    d.buf.replace(range.location, range.length, D_O(MutableString, (const MutableString &)aString).buf);
+}
 
 CC_END

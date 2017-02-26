@@ -30,9 +30,12 @@ CLASS_TAGGEDPOINTER_AVAILABLE class String : public Object
 {
 public:
     explicit String(const char *s);
+    explicit String(const void *bytes, uinteger length);
     explicit String(const string &s);
     explicit String(string &&s);
     explicit String(const Data &data);
+    explicit String(const String &other);
+    explicit String(String &&other);
 	String();
 	~String() override;
 
@@ -65,6 +68,7 @@ public:
     double doubleValue() const;
     float floatValue() const;
     int intValue() const;
+    long longValue() const;
     long long longLongValue() const;
     bool boolValue() const;
     integer integerValue() const;
@@ -78,13 +82,12 @@ public:
     shared_ptr<String> uppercaseString() const;
     shared_ptr<String> lowercaseString() const;
 
-    Data *dataUsingEncoding() const;
+    shared_ptr<Data> dataUsingEncoding() const;
     uinteger getBytes(void *buffer, uinteger bufferLength) const;
 
     // creation
     static shared_ptr<String> stringWithString(const String &other);
     static shared_ptr<String> stringWithBytes(const void *bytes, uinteger length);
-    static shared_ptr<String> stringWithBytesNoCopy(void *bytes, uinteger  length);
     static shared_ptr<String> stringWithUTF8String(const char *nullTerminatedCString);
     static shared_ptr<String> stringWithFormat(const char *format, ...) __printflike__(1, 2);
     static shared_ptr<String> stringWithFormat(const char *format, va_list argList);
@@ -93,7 +96,9 @@ public:
 class MutableString : public String
 {
 public:
+    explicit MutableString();
     explicit MutableString(const char *s);
+    explicit MutableString(const void *bytes, uinteger length);
     explicit MutableString(const string &s);
     explicit MutableString(string &&s);
     explicit MutableString(const Data &data);
@@ -106,13 +111,18 @@ public:
 
     void append(const String &other);
     void append(const char *format, ...) __printflike__(2,3);
+    void append(const char *format, va_list argList);
     void append(const char *nullTerminatedCString);
+    void append(const Data &data);
+    void append(char c);
 
     void insert(char c, uinteger pos);
     void insert(const char *nullTerminatedCString, uinteger pos);
-    void insert(byte *b, uinteger length, uinteger pos);
+    void insert(const byte *b, uinteger length, uinteger pos);
     void insert(const Data &data, uinteger pos);
     void insert(const String &aString, uinteger pos);
+    void insert(uinteger pos, const char *format, ...) __printflike__(3,4);
+    void insert(uinteger pos, const char *format, va_list argList);
 
     void clear();
 
