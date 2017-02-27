@@ -16,7 +16,7 @@ void CHLog(const char *fmt, ...)
     char *buffer = nullptr;
     va_list ap;
     va_start(ap, fmt);
-    (void) collection_codes::tprintf_c(buffer, nullptr, fmt, ap, OUTPUT_FLAG_LOG);
+    (void) _CC::tprintf_c(buffer, nullptr, fmt, ap, OUTPUT_FLAG_LOG);
     va_end(ap);
     puts(buffer);
     free(buffer);

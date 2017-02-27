@@ -9,7 +9,7 @@
 #ifndef Date_hpp
 #define Date_hpp
 
-#include "defines.h"
+#include "global.h"
 #include <iosfwd>
 
 CC_BEGIN

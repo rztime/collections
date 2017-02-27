@@ -9,22 +9,8 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
-#include <type_traits>
-#include <vector>
-#include <unordered_map>
-#include <string>
-#include <chrono>
-#include <memory>
-#include <cstdlib>
-
-using std::vector;
-using std::unordered_map;
-using std::string;
-using std::shared_ptr;
-using std::weak_ptr;
-
 #ifndef NESPEC
-#define NESPEC collection_codes
+#define NESPEC cc
 #endif // !NESPEC
 
 #ifndef CC_BEGIN
@@ -42,9 +28,6 @@ using std::weak_ptr;
 
 CC_BEGIN
 
-using namespace std::chrono;
-using TimeInterval = std::chrono::duration<double>;
-
 #ifndef CLASS_TAGGEDPOINTER_AVAILABLE
 #define CLASS_TAGGEDPOINTER_AVAILABLE
 #endif // !CLASS_TAGGEDPOINTER_AVAILABLE
@@ -54,31 +37,6 @@ using TimeInterval = std::chrono::duration<double>;
 #else
 # define CC_EXTERN extern
 #endif
-
-#ifdef assert
-#undef assert
-#endif // assert
-
-#ifdef DEBUG
-# define ____fn____ __PRETTY_FUNCTION__
-# define assert(cond, desc, ...) \
-    do {\
-        if (!(cond)) {\
-            fprintf(stderr, "*** Assertion failure in [%s], %s:%d => ('%s')", ____fn____, __FILE__, __LINE__, #cond);\
-            if (*desc) {\
-                putchar(','), putchar(' ');\
-                fprintf(stderr, desc, ##__VA_ARGS__);\
-            }\
-            putchar('\n');\
-            abort();\
-        }\
-    } while (0)
-
-# define parameterAssert(cond) assert((cond), "Invalid parameter not satisfying: %s", #cond)
-#else
-# define assert(cond, desc, ...)
-# define parameterAssert(c)
-#endif // DEBUG
 
 #ifndef __PL64__
 # ifdef WIN32
@@ -93,28 +51,6 @@ using TimeInterval = std::chrono::duration<double>;
 #  define __PL64__ __LP64__
 # endif // __clang__
 #endif // !__PL64__
-
-using uint32_t = unsigned int;
-using uint16_t = unsigned short;
-using uint64_t = unsigned long long;
-using byte = unsigned char;
-
-#if __PL64__
-using IMP = unsigned long long;
-using uintptr_t = unsigned long long;
-
-using integer = long long;
-using uinteger = unsigned long long;
-#else
-using IMP = unsigned int;
-using uintptr_t = unsigned int;
-
-using integer = int;
-using uinteger = unsigned int;
-
-#endif // __PL64__
-
-const constexpr integer NotFound = (integer)-1;
 
 #if defined(__clang__)
 #define __printflike__ __printflike

@@ -10,8 +10,7 @@
 #ifndef Variant_hpp
 #define Variant_hpp
 
-#include "defines.h"
-#include <unordered_map>
+#include "global.h"
 
 CC_BEGIN
 

@@ -284,22 +284,21 @@ static string visit(const Variant &v, int depth)
             ss.setf(ios::showbase);
             ss.setf(ios_base::hex, ios_base::basefield);
             ss << "<";
-            while (length >= 4) {
-                ss << *pll++ << " ";
-                length -= 4;
+
+            for (;;) {
+                ss << *pll++;
+                if (length -= 4 < 4) {
+                    break;
+                }
+                ss << " ";
             }
             if (length > 0) {
                 unsigned int rest = 0;
                 memcpy(&rest, pll, length);
-                ss << rest << ">";
-
-            } else if (length == 0){
-                string str = ss.str();
-                str.replace(str.length() - 1, 1, ">");
-                return str;
-            } else {
-                assert(false, "length(%zu) must be >= 0.", length);
+                ss << rest;
             }
+            ss << ">";
+            return ss.str();
         }
             break;
         case Variant::Type::DATE:

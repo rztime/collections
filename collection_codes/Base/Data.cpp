@@ -7,10 +7,11 @@
 //
 
 #include "Data.hpp"
+#include "TaggedPointer.h"
+#include "Object.inl"
 #include <stdlib.h>
 #include <memory.h>
-#include <memory>
-#include "TaggedPointer.h"
+#include <ostream>
 
 using namespace std;
 
@@ -19,13 +20,20 @@ CC_BEGIN
 struct DataPrivate : public ObjectPrivate
 {
     DataPrivate(integer capacity)
-    :data(capacity){}
+    :data(capacity)
+    {}
 
     DataPrivate(const vector<byte> &d)
-    :data(d) {}
+    :data(d)
+    {}
 
     DataPrivate(vector<byte> &&d)
-    :data(std::move(d)){}
+    :data(std::move(d)) {}
+
+    DataPrivate* duplicate() const override
+    {
+        return new DataPrivate(data);
+    }
 
     vector<byte> data;
 };
@@ -56,15 +64,14 @@ Data::Data(const string &aString)
     append(aString);
 }
 
-Data *Data::duplicate() const
+Data::Data(const Data &data)
+:Object(new DataPrivate(D_O(Data, data).data))
 {
-    if (isTaggedPointer()) {
-        return (Data *)this;
-    }
-    D_D(Data);
-    Data *obj = new Data(d.data.size());
-    *obj = d.data;
-    return obj;
+}
+
+Data::Data(Data &&data)
+:Object(new DataPrivate(std::move(D_O(Data, data).data)))
+{
 }
 
 Data::~Data()
@@ -235,6 +242,45 @@ const byte * Data::data() const
 {
 	D_D(Data);
 	return d.data.data();
+}
+
+std::ostream& operator<<(std::ostream& os, const Data &data)
+{
+    return os << &data;
+}
+
+std::ostream& operator<<(std::ostream& os, const shared_ptr<Data> &data)
+{
+    return os << data.get();
+}
+
+std::ostream& operator<<(std::ostream& os, const Data *data)
+{
+    if (data) {
+        os << "(null)";
+    } else {
+        auto flags = os.flags();
+        os.setf(ios::showbase);
+        os.setf(ios_base::hex, ios_base::basefield);
+        os << "<";
+        size_t length = data->length();
+        const unsigned int *p = (const unsigned int *)data->data();
+        for (;;) {
+            os << *p++;
+            if (length -= 4 < 4) {
+                break;
+            }
+            os << " ";
+        }
+        if (length > 0) {
+            unsigned int rest = 0;
+            memcpy(&rest, p, length);
+            os << rest;
+        }
+        os << ">";
+        os.setf(flags);
+    }
+    return os;
 }
 
 CC_END

@@ -1,23 +1,19 @@
 //
-//  CHBuffer.hpp
+//  Data.hpp
 //  TagBufCPP
 //
 //  Created by hejunqiu on 16/9/2.
 //  Copyright © 2016年 CHE. All rights reserved.
 //
 
-#ifndef CHBuffer_hpp
-#define CHBuffer_hpp
+#ifndef DATA_HPP
+#define DATA_HPP
 
-#include <stdio.h>
 #include "Object.hpp"
-#include <functional>
-#include <vector>
-#include <string>
 #include "Range.hpp"
+#include <functional>
+#include <iosfwd>
 
-using std::vector;
-using std::string;
 
 CC_BEGIN
 
@@ -32,7 +28,6 @@ public:
     explicit Data(const Data &data);
     explicit Data(Data &&data);
 
-    Data *duplicate() const;
     ~Data() override;
 
     uinteger length() const;
@@ -69,7 +64,11 @@ public:
 
 	byte *data();
 	const byte *data() const;
+
+    friend std::ostream& operator<<(std::ostream& os, const Data &data);
+    friend std::ostream& operator<<(std::ostream& os, const shared_ptr<Data> &data);
+    friend std::ostream& operator<<(std::ostream& os, const Data *data);
 };
 
 CC_END
-#endif /* CHBuffer_hpp */
+#endif /* DATA_HPP */

@@ -9,7 +9,7 @@
 #ifndef TPRINTF_HPP
 #define TPRINTF_HPP
 
-#include "defines.h"
+#include "global.h"
 #include <stdarg.h>
 
 CC_BEGIN

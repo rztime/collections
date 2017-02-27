@@ -9,8 +9,8 @@
 #ifndef RANGE_HPP
 #define RANGE_HPP
 
-#include "defines.h"
-#include <memory>
+
+#include "global.h"
 
 CC_BEGIN
 

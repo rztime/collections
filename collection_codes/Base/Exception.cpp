@@ -13,6 +13,7 @@
 #include "Number.hpp"
 #include <exception>
 #include <cstdlib>
+#include "Object.inl"
 
 using namespace std;
 
@@ -42,14 +43,37 @@ static inline void exceptionHandler()
 
 struct ExceptionPrivate : public ObjectPrivate
 {
-    shared_ptr<String> name;
-    shared_ptr<String> reason;
-    shared_ptr<Object> userInfo;
-    shared_ptr<Object> reserved;
+    String *name;
+    String *reason;
+    Object *userInfo;
+    void *reserved = 0;
+
     ExceptionPrivate(const shared_ptr<String> &exceptionName, const shared_ptr<String> &reason, const shared_ptr<Object> &userInfo)
-    :name(exceptionName), reason(reason), userInfo(userInfo) {}
+    :name(exceptionName ? exceptionName->copy<String>() : nullptr)
+    ,reason(reason ? reason->copy<String>() : nullptr)
+    ,userInfo(userInfo ? userInfo->copy<Object>() : nullptr)
+    {}
+
     ExceptionPrivate()
-    :name(nullptr), reason(nullptr), userInfo(nullptr) {}
+    :name(nullptr)
+    ,reason(nullptr)
+    ,userInfo(nullptr)
+    {}
+
+    ExceptionPrivate* duplicate () const override
+    {
+        auto copy = new ExceptionPrivate();
+        if (name) {
+            copy->name = name->copy<String>();
+        }
+        if (reason) {
+            copy->reason = reason->copy<String>();
+        }
+        if (userInfo) {
+            copy->userInfo = userInfo->copy<Object>();
+        }
+        return copy;
+    }
 };
 
 Exception::Exception() : Object(new ExceptionPrivate()) {}
@@ -101,19 +125,19 @@ void Exception::raise(const shared_ptr<String> &exceptionName,
 shared_ptr<String> Exception::exceptionName() const
 {
     D_D(Exception);
-    return d.name;
+    return shared_ptr<String>(d.name->copy<String>());
 }
 
 shared_ptr<String> Exception::reason() const
 {
     D_D(Exception);
-    return d.reason;
+    return shared_ptr<String>(d.reason->copy<String>());
 }
 
 shared_ptr<Object> Exception::userInfo() const
 {
     D_D(Exception);
-    return d.userInfo;
+    return shared_ptr<Object>(d.userInfo->copy<Object>());
 }
 
 shared_ptr<vector<shared_ptr<Number>>> Exception::callStackReturnAddresses() const

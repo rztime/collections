@@ -12,13 +12,7 @@
 #include "Object.hpp"
 #include "Range.hpp"
 #include <stdarg.h>
-#include <vector>
-#include <memory>
-#include <string>
-
-using std::vector;
-using std::shared_ptr;
-using std::string;
+#include <iosfwd>
 
 CC_BEGIN
 
@@ -85,12 +79,18 @@ public:
     shared_ptr<Data> dataUsingEncoding() const;
     uinteger getBytes(void *buffer, uinteger bufferLength) const;
 
+    const char& operator[](const size_t pos) const;
+
     // creation
     static shared_ptr<String> stringWithString(const String &other);
     static shared_ptr<String> stringWithBytes(const void *bytes, uinteger length);
     static shared_ptr<String> stringWithUTF8String(const char *nullTerminatedCString);
     static shared_ptr<String> stringWithFormat(const char *format, ...) __printflike__(1, 2);
     static shared_ptr<String> stringWithFormat(const char *format, va_list argList);
+
+    friend std::ostream& operator<<(std::ostream& os, const String &str);
+    friend std::ostream& operator<<(std::ostream& os, const shared_ptr<String> &str);
+    friend std::ostream& operator<<(std::ostream& os, const String *str);
 };
 
 class MutableString : public String
@@ -125,6 +125,7 @@ public:
     void insert(uinteger pos, const char *format, va_list argList);
 
     void clear();
+    char& operator[](const size_t pos);
 
     void replaceOccurrencesOfStringWithString(const String &target, const String &replacement);
     void replaceCharactersInRangeWithString(Range range, const String &aString);

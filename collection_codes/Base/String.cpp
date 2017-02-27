@@ -14,6 +14,8 @@
 #include "Algorithm.hpp"
 #include "Data.hpp"
 #include <algorithm>
+#include "Object.inl"
+#include <ostream>
 
 using namespace std;
 
@@ -138,8 +140,8 @@ bool String::caseInsensitiveCompare(const String & aString) const
 	D_D(String);
 	string m1 = d.buf;
 	string m2 = D_O(String, aString).buf;
-	std::transform(m1.begin(), m1.end(), m1.begin(), toupper);
-	std::transform(m2.begin(), m2.end(), m2.begin(), toupper);
+    std::transform(m1.begin(), m1.end(), m1.begin(), ::toupper);
+    std::transform(m2.begin(), m2.end(), m2.begin(), ::toupper);
 	return m1 == m2;
 }
 
@@ -337,7 +339,7 @@ shared_ptr<String> String::uppercaseString() const
 {
     auto copy = duplicate();
     auto &s = D_O(String, *copy).buf;
-    std::transform(s.begin(), s.end(), s.begin(), std::toupper);
+    std::transform(s.begin(), s.end(), s.begin(), ::toupper);
     return copy;
 }
 
@@ -345,7 +347,7 @@ shared_ptr<String> String::lowercaseString() const
 {
     auto copy = duplicate();
     auto &s = D_O(String, *copy).buf;
-    std::transform(s.begin(), s.end(), s.begin(), std::tolower);
+    std::transform(s.begin(), s.end(), s.begin(), ::tolower);
     return copy;
 }
 
@@ -363,6 +365,12 @@ uinteger String::getBytes(void *buffer, uinteger bufferLength) const
     uinteger length = std::min(bufferLength, (uinteger)d.buf.length());
     memcpy(buffer, d.buf.data(), length);
     return length;
+}
+
+const char& String::operator[](const size_t pos) const
+{
+    D_D(String);
+    return d.buf[pos];
 }
 
 // creation
@@ -398,6 +406,26 @@ shared_ptr<String> String::stringWithFormat(const char *format, va_list argList)
     auto str = make_shared<String>(buffer, length);
     free(buffer);
     return str;
+}
+
+std::ostream& operator<<(std::ostream& os, const String &str)
+{
+    return os << &str;
+}
+
+std::ostream& operator<<(std::ostream& os, const shared_ptr<String> &str)
+{
+    return os << str.get();
+}
+
+std::ostream& operator<<(std::ostream& os, const String *str)
+{
+    if (!str) {
+        os << "(null)";
+    } else {
+        os << D_O(String, *str).buf;
+    }
+    return os;
 }
 
 // MutableString
@@ -547,6 +575,12 @@ void MutableString::clear()
 {
     D_D(MutableString);
     d.buf.clear();
+}
+
+char& MutableString::operator[](const size_t pos)
+{
+    D_D(String);
+    return d.buf[pos];
 }
 
 void MutableString::replaceOccurrencesOfStringWithString(const String &target, const String &replacement)

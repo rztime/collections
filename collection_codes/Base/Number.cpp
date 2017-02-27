@@ -9,6 +9,7 @@
 #include "Number.hpp"
 #include "TaggedPointer.h"
 #include "String.hpp"
+#include "Object.inl"
 
 CC_BEGIN
 
@@ -24,10 +25,23 @@ struct NumberPrivate : public ObjectPrivate
         char charValue;
         bool boolValue;
     } internal = {0};
+
     NumberPrivate(float v) { internal.floatValue = v; }
+
     NumberPrivate(double v) { internal.doubleValue = v; }
+
     template<typename T>
     NumberPrivate(T v) { internal.longLongValue = (long long)v; }
+
+    NumberPrivate()
+    {}
+
+    NumberPrivate* duplicate() const override
+    {
+        auto copy = new NumberPrivate;
+        copy->internal = internal;
+        return copy;
+    }
 };
 
 Number::Number()
