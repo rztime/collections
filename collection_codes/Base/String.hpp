@@ -23,7 +23,7 @@ class MutableString;
 CLASS_TAGGEDPOINTER_AVAILABLE class String : public Object
 {
 public:
-    explicit String(const char *s);
+    String(const char *s);
     explicit String(const void *bytes, uinteger length);
     explicit String(const string &s);
     explicit String(string &&s);
@@ -32,8 +32,6 @@ public:
     explicit String(String &&other);
 	String();
 	~String() override;
-
-    shared_ptr<String> duplicate() const;
     
     uinteger length() const;
     uinteger  capacity() const;

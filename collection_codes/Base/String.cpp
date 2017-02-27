@@ -91,14 +91,6 @@ String::~String()
 {
 }
 
-shared_ptr<String> String::duplicate() const
-{
-	auto copy = make_shared<String>();
-	D_D(String);
-	D_O(String, *copy).buf = d.buf;
-	return copy;
-}
-
 uinteger String::length() const
 {
 	D_D(String);
@@ -199,14 +191,14 @@ Range String::rangeOfString(const String &aString) const
 
 shared_ptr<String> String::stringByAppendingString(const String &aString) const
 {
-    auto copy = duplicate();
+    auto copy = this->copy<String>();
     D_O(String, *copy).buf += D_O(String, aString).buf;
-    return copy;
+    return shared_ptr<String>(copy);
 }
 
 shared_ptr<String> String::stringByAppendingFormat(const char *format, ...) const
 {
-    auto copy = duplicate();
+    auto copy = this->copy<String>();
     do {
         if (!format || !*format) {
             break;
@@ -221,12 +213,12 @@ shared_ptr<String> String::stringByAppendingFormat(const char *format, ...) cons
         free(buffer);
         buffer = nullptr;
     } while (0);
-    return copy;
+    return shared_ptr<String>(copy);
 }
 
 shared_ptr<String> String::stringByReplacingOccurrencesOfStringWithString(const String &target, const String &replacement) const
 {
-    auto copy = duplicate();
+    auto copy = this->copy<String>();
     do {
         vector<Range> result;
         D_D(String);
@@ -244,12 +236,12 @@ shared_ptr<String> String::stringByReplacingOccurrencesOfStringWithString(const 
             buf.replace(range.location, range.length, D_O(String, replacement).buf);
         }
     } while (0);
-    return copy;
+    return shared_ptr<String>(copy);
 }
 
 shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const String &replacement) const
 {
-    auto copy = duplicate();
+    auto copy = this->copy<String>();
     do {
         D_D(String);
         if (range.maxRange() > d.buf.length()) {
@@ -259,7 +251,7 @@ shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const
         auto &buf = D_O(String, *copy).buf;
         buf.replace(range.location, range.length, D_O(String, replacement).buf);
     } while (0);
-    return copy;
+    return shared_ptr<String>(copy);
 }
 
 shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const String &separaotr) const
@@ -337,18 +329,18 @@ uinteger String::unsignedIntegerValue() const
 
 shared_ptr<String> String::uppercaseString() const
 {
-    auto copy = duplicate();
+    auto copy = this->copy<String>();
     auto &s = D_O(String, *copy).buf;
     std::transform(s.begin(), s.end(), s.begin(), ::toupper);
-    return copy;
+    return shared_ptr<String>(copy);
 }
 
 shared_ptr<String> String::lowercaseString() const
 {
-    auto copy = duplicate();
+    auto copy = this->copy<String>();
     auto &s = D_O(String, *copy).buf;
     std::transform(s.begin(), s.end(), s.begin(), ::tolower);
-    return copy;
+    return shared_ptr<String>(copy);
 }
 
 shared_ptr<Data> String::dataUsingEncoding() const
@@ -376,7 +368,7 @@ const char& String::operator[](const size_t pos) const
 // creation
 shared_ptr<String> String::stringWithString(const String &other)
 {
-    return other.duplicate();
+    return shared_ptr<String>(other.copy<String>());
 }
 
 shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length)
