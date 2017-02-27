@@ -7,15 +7,16 @@
 //
 
 #include "String.hpp"
-#include "TaggedPointer.h"
-#include <stdlib.h>
-#include <string.h>
+#include "String.inl"
+#include "Object.inl"
 #include "tprintf.hpp"
 #include "Algorithm.hpp"
+#include "TaggedPointer.h"
 #include "Data.hpp"
-#include <algorithm>
-#include "Object.inl"
 #include <ostream>
+#include <stdlib.h>
+#include <string.h>
+#include <algorithm>
 
 using namespace std;
 
@@ -54,6 +55,7 @@ struct StringPrivate : ObjectPrivate
 };
 
 #define TAGGED_STRING_POINTER_RETURN(obj) reinterpret_cast<const char *>(((uintptr_t)obj ^ TAGGED_POINTER_STRING_FLAG) >> 1)
+#define _make_shared_ptr(c) shared_ptr<String>(c, __deleter__())
 
 String::String(const char * s)
 :Object(new StringPrivate(s))
@@ -80,15 +82,22 @@ String::String(const String &other)
 {
     D_D(String);
     if (other.isTaggedPointer()) {
-        d.buf.append(nullptr, other.length());
+        d.buf.append(begin().base(), other.length());
     } else {
         d.buf = D_O(String, other).buf;
     }
 }
 
 String::String(String &&other)
-:Object(new StringPrivate(std::move(D_O(String, other).buf)))
-{}
+:Object(new StringPrivate)
+{
+    D_D(String);
+    if (other.isTaggedPointer()) {
+        d.buf.append(begin().base(), other.length());
+    } else {
+        d.buf = std::move(D_O(String, other).buf);
+    }
+}
 
 String::String()
 :Object(new StringPrivate)
@@ -100,12 +109,27 @@ String::~String()
 
 uinteger String::length() const
 {
+    if (isTaggedPointer()) {
+        uintptr_t ptr = (uintptr_t)this;
+        uinteger len = 0;
+        if (TAGGED_POINTER_STRING_HAS_A_LEGNTH(ptr)) {
+            len = (ptr & TAGGED_POINTER_STRING_LENGTH_MASK) >> TAGGED_POINTER_STRING_LENGTH_OFFSET;
+            parameterAssert(len <= TAGGED_POINTER_STRING_MAX_LENGTH);
+        } else {
+            const char *str = TAGGED_POINTER_STRING_GET_STRING(ptr);
+            len = strlen(str);
+        }
+        return len;
+    }
 	D_D(String);
 	return d.buf.size();
 }
 
 uinteger String::capacity() const
 {
+    if (isTaggedPointer()) {
+        return length();
+    }
 	D_D(String);
 	return d.buf.capacity();
 }
@@ -123,25 +147,37 @@ shared_ptr<String> String::substringToIndex(uinteger index) const
 
 shared_ptr<String> String::substring(Range range) const
 {
+    if (isTaggedPointer()) {
+        auto ptr = (uintptr_t)this;
+        const char *str = TAGGED_POINTER_STRING_GET_STRING(ptr);
+        return make_shared<String>(str, str + length());
+    }
 	D_D(String);
 	string substr = d.buf.substr(range.location, range.length);
-	return make_shared<String>(std::move(substr));
+	return shared_ptr<String>(new String(std::move(substr)));
 }
 
 bool String::compare(const String & aString) const
 {
-	D_D(String);
-	return d.buf == D_O(String, aString).buf;
+    if (aString.length() != length()) {
+        return false;
+    }
+    auto iter_s_this = this->begin();
+    auto iter_s_other = aString.begin();
+    auto iter_e = this->end();
+    while (*iter_s_this++ == *iter_s_other++ && iter_s_other != iter_e) {
+        continue;
+    }
+    return iter_s_this == iter_e;
 }
 
 bool String::caseInsensitiveCompare(const String & aString) const
 {
-	D_D(String);
-	string m1 = d.buf;
-	string m2 = D_O(String, aString).buf;
-    std::transform(m1.begin(), m1.end(), m1.begin(), ::toupper);
-    std::transform(m2.begin(), m2.end(), m2.begin(), ::toupper);
-	return m1 == m2;
+    string s1(begin(), end());
+    string s2(aString.begin(), aString.end());
+    std::transform(s1.begin(), s1.end(), s1.begin(), ::toupper);
+    std::transform(s2.begin(), s2.end(), s2.begin(), ::toupper);
+	return s1 == s1;
 }
 
 bool String::isEqualToString(const String & aString) const
@@ -151,36 +187,30 @@ bool String::isEqualToString(const String & aString) const
 
 bool String::hasPrefix(const String & str) const
 {
-	D_D(String);
-	auto &m1 = d.buf;
-	auto &m2 = D_O(String, str).buf;
-	integer length = m2.length();
-	if (m1.length() < length) {
-		return false;
-	}
-	auto b1 = m1.data();
-	auto b2 = m2.data();
-	while (*b1++ == *b2++ && --length > 0) {
+    if (this->length() < str.length()) {
+        return false;
+    }
+	auto b1 = begin();
+	auto b2 = str.begin();
+    auto e = str.end();
+	while (*b1++ == *b2++ && b2 != e) {
 		continue;
 	}
-	return length == 0;
+	return b2 == e;
 }
 
 bool String::hasSuffix(const String & str) const
 {
-	D_D(String);
-	auto &m1 = d.buf;
-	auto &m2 = D_O(String, str).buf;
-	integer length = m2.length();
-	if (m1.length() < length) {
-		return false;
-	}
-	auto b1 = m1.data() + m1.length();
-	auto b2 = m2.data() + length;
-	while (*--b1 == *--b2 && --length > 0) {
+    if (this->length() < str.length()) {
+        return false;
+    }
+    auto b1 = rbegin();
+    auto b2 = str.rbegin();
+    auto e = str.rend();
+	while (*b1++ == *b2++ && b2 != e) {
 		continue;
 	}
-	return length == 0;
+	return b2 == e;
 }
 
 bool String::containsString(const String &aString) const
@@ -190,10 +220,9 @@ bool String::containsString(const String &aString) const
 
 Range String::rangeOfString(const String &aString) const
 {
-    D_D(String);
-    auto s1 = d.buf.data();
-    auto s2 = D_O(String, aString).buf.data();
-    return BMContainsString(s1, (uint32_t)d.buf.length(), s2, (uint32_t)D_O(String, aString).buf.length());
+    auto s1 = this->begin().base();
+    auto s2 = aString.begin().base();
+    return BMContainsString(s1, (uint32_t)length(), s2, (uint32_t)aString.length());
 }
 
 shared_ptr<String> String::stringByAppendingString(const String &aString) const
@@ -386,7 +415,7 @@ shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length)
         if (length <= TAGGED_POINTER_STRING_MAX_LENGTH) {
             str_int |= ((length << TAGGED_POINTER_STRING_LENGTH_OFFSET) | TAGGED_POINTER_STRING_LENGTH_FLAG);
         }
-        return shared_ptr<String>((String *)str_int);
+        return shared_ptr<String>((String *)str_int, __deleter__());
     }
     return make_shared<String>(bytes, length);
 }

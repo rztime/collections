@@ -35,6 +35,10 @@ public:
     virtual bool equalTo(const Object &anObject) const;
     virtual String *description() const;
     virtual uint64_t hash_code() const;
+
+    // override
+    void *operator new(size_t size);
+    void operator delete(void *obj);
 protected:
     struct ObjectPrivate *_d = 0;
     Object *duplicate() const;

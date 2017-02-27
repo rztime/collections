@@ -25,6 +25,7 @@ struct iterator_traits<_Tp*>
     typedef typename std::remove_const<_Tp>::type value_type;
     typedef _Tp* pointer;
     typedef _Tp& reference;
+    typedef std::random_access_iterator_tag iterator_category;
 };
 
 template <typename _Iter>
@@ -32,13 +33,14 @@ class iterator {
     _Iter current;
 public:
     typedef _Iter iterator_type;
+    typedef typename iterator_traits<iterator_type>::iterator_category iterator_category;
     typedef typename iterator_traits<_Iter>::difference_type difference_type;
     typedef typename iterator_traits<_Iter>::value_type      value_type;
     typedef typename iterator_traits<_Iter>::reference       reference;
     typedef typename iterator_traits<_Iter>::pointer         pointer;
 
     iterator() _NOEXCEPT : current() {}
-    explicit iterator(iterator_type __x) _NOEXCEPT : current(__x) {}
+    iterator(iterator_type __x) _NOEXCEPT : current(__x) {}
 
     iterator_type base() const _NOEXCEPT { return current; }
     reference operator*() const _NOEXCEPT { return *current; }
@@ -52,7 +54,7 @@ public:
 
     iterator operator++(int) _NOEXCEPT
     {
-        iterator_type tmp(this);
+        iterator tmp(*this);
         ++(*this);
         return tmp;
     }
@@ -65,7 +67,7 @@ public:
 
     iterator operator--(int) _NOEXCEPT
     {
-        iterator_type tmp(this);
+        iterator tmp(*this);
         --(*this);
         return tmp;
     }
@@ -80,6 +82,19 @@ public:
     iterator& operator+=(difference_type n) _NOEXCEPT
     {
         current += n;
+        return *this;
+    }
+
+    iterator operator-(difference_type n) const _NOEXCEPT
+    {
+        iterator __w(*this);
+        __w += n;
+        return __w;
+    }
+
+    iterator& operator-=(difference_type n) _NOEXCEPT
+    {
+        current -= n;
         return *this;
     }
 
@@ -109,6 +124,12 @@ public:
     template<typename _Iter1, typename _Iter2>
     friend bool operator<=(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
     { return !(y < x); }
+
+    template <class _Iter1, class _Iter2>
+    friend difference_type operator-(const iterator<_Iter1>& __x, const iterator<_Iter2>& __y) _NOEXCEPT
+    {
+        return __x.base() - __y.base();
+    }
 };
 
 template <typename _Iter>
@@ -122,8 +143,6 @@ public:
 
     reverse_iterator() _NOEXCEPT : current() {}
     explicit reverse_iterator(_Iter __x) _NOEXCEPT : current(__x) {}
-//    template <class _Up> reverse_iterator(const reverse_iterator<_Up>& __u)
-//    : current(__u.base()) {}
 
     _Iter base() const _NOEXCEPT {return current;}
     reference operator*() const _NOEXCEPT {_Iter __tmp = current; return *--__tmp;}
@@ -156,6 +175,42 @@ public:
     reference         operator[](difference_type __n) const _NOEXCEPT
     {return *(*this + __n);}
 };
+
+template <class _Iter1, class _Iter2>
+inline bool operator==(const reverse_iterator<_Iter1>& __x, const reverse_iterator<_Iter2>& __y)
+{
+    return __x.base() == __y.base();
+}
+
+template <class _Iter1, class _Iter2>
+inline bool operator<(const reverse_iterator<_Iter1>& __x, const reverse_iterator<_Iter2>& __y)
+{
+    return __x.base() > __y.base();
+}
+
+template <class _Iter1, class _Iter2>
+inline bool operator!=(const reverse_iterator<_Iter1>& __x, const reverse_iterator<_Iter2>& __y)
+{
+    return __x.base() != __y.base();
+}
+
+template <class _Iter1, class _Iter2>
+inline bool operator>(const reverse_iterator<_Iter1>& __x, const reverse_iterator<_Iter2>& __y)
+{
+    return __x.base() < __y.base();
+}
+
+template <class _Iter1, class _Iter2>
+inline bool operator>=(const reverse_iterator<_Iter1>& __x, const reverse_iterator<_Iter2>& __y)
+{
+    return __x.base() <= __y.base();
+}
+
+template <class _Iter1, class _Iter2>
+inline bool operator<=(const reverse_iterator<_Iter1>& __x, const reverse_iterator<_Iter2>& __y)
+{
+    return __x.base() >= __y.base();
+}
 
 CC_END
 

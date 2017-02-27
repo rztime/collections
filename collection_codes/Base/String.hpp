@@ -30,7 +30,6 @@ public:
     using const_reverse_iterator = _CC::reverse_iterator<const_iterator>;
     using pointer = std::string::pointer;
     using const_pointer = std::string::const_pointer;
-
 public:
     String(const char *s);
     explicit String(const void *bytes, uinteger length);
@@ -39,6 +38,8 @@ public:
     explicit String(const Data &data);
     explicit String(const String &other);
     explicit String(String &&other);
+    template<class InputIterator>
+    explicit String(InputIterator first, InputIterator last);
 	String();
 	~String() override;
 
@@ -171,6 +172,11 @@ public:
     void replaceOccurrencesOfStringWithString(const String &target, const String &replacement);
     void replaceCharactersInRangeWithString(Range range, const String &aString);
 };
+
+template<class InputIterator>
+String::String(InputIterator first, InputIterator last)
+:String(first, last - first)
+{}
 
 #ifndef s
 #define s(cstr) String::stringWithUTF8String(cstr)

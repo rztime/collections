@@ -65,4 +65,22 @@ Object *Object::duplicate() const
     return copy;
 }
 
+void *Object::operator new(size_t size)
+{
+    void *__m = calloc(1, size);
+    return __m;
+}
+
+void Object::operator delete(void *_obj)
+{
+    auto obj = static_cast<Object *>(_obj);
+    parameterAssert(obj);
+    if (!obj) {
+        return;
+    }
+    if (!obj->isTaggedPointer()) {
+        free(_obj);
+    }
+}
+
 CC_END
