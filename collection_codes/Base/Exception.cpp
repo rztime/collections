@@ -8,7 +8,11 @@
 
 #include "Exception.hpp"
 #include "String.hpp"
+#if defined(_MSC_VER)
+#include <exception>
+#else
 #include <execinfo.h>
+#endif // _MSC_VER
 #include "log.hpp"
 #include "Number.hpp"
 #include <exception>
@@ -113,7 +117,7 @@ void Exception::raise(const shared_ptr<String> &exceptionName,
 
 void Exception::raise(const shared_ptr<String> &exceptionName,
                       const char *format,
-                      va_list argList) throw()
+                      va_list argList) _NOEXCEPT(false)
 {
     shared_ptr<String> reason = String::stringWithFormat(format, argList);
     va_end(argList);
@@ -142,28 +146,37 @@ shared_ptr<Object> Exception::userInfo() const
 
 shared_ptr<vector<shared_ptr<Number>>> Exception::callStackReturnAddresses() const
 {
-    void *d[10]{0};
-    int count = backtrace(d, 10);
-    vector<shared_ptr<Number>> addrr(10);
-    for (int i=0; i<count; ++i) {
-        addrr.push_back(Number::numberWithValue((uintptr_t)d[i]));
-    }
-    return make_shared<vector<shared_ptr<Number>>>(std::move(addrr));
+#if defined(_MSC_VER)
+	return nullptr;
+#else
+	void *d[10]{ 0 };
+	int count = backtrace(d, 10);
+	vector<shared_ptr<Number>> addrr(10);
+	for (int i = 0; i<count; ++i) {
+		addrr.push_back(Number::numberWithValue((uintptr_t)d[i]));
+	}
+	return make_shared<vector<shared_ptr<Number>>>(std::move(addrr));
+#endif
 }
 
 shared_ptr<vector<shared_ptr<String>>> Exception::callStackSymbols() const
 {
-    void *array[10] = {0};
-    int size = 0;
-    char **strings = nullptr;
-    size = backtrace (array, 10);
-    strings = backtrace_symbols (array, size);
-    vector<shared_ptr<String>> symbols(10);
-    for (int i = 0; i < size; i++) {
-        symbols.emplace_back(make_shared<String>(strings[i]));
-    }
-    free(strings);
-    return make_shared<vector<shared_ptr<String>>>(std::move(symbols));
+#if defined(_MSC_VER)
+	return nullptr;
+#else
+	void *array[10] = { 0 };
+	int size = 0;
+	char **strings = nullptr;
+	size = backtrace(array, 10);
+	strings = backtrace_symbols(array, size);
+	vector<shared_ptr<String>> symbols(10);
+	for (int i = 0; i < size; i++) {
+		symbols.emplace_back(make_shared<String>(strings[i]));
+	}
+	free(strings);
+	return make_shared<vector<shared_ptr<String>>>(std::move(symbols));
+#endif
+   
 }
 
 CC_END

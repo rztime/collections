@@ -33,7 +33,12 @@
 
 #include <limits.h>
 #include <sys/types.h>
+#if defined(_MSC_VER)
+typedef uint32_t uint;
+typedef uint32_t ssize_t;
+#else
 #include <printf.h>
+#endif
 #include <string.h>
 #include <stdlib.h>
 
@@ -177,12 +182,30 @@ uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_lis
         }
 
         switch(c) {
-            case '0'...'9':
-                if (c == '0' && format_num == 0)
-                    flags |= LEADZEROFLAG;
-                format_num *= 10;
-                format_num += c - '0';
-                goto next_format;
+#if defined(_MSC_VER)
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+			if (c == '0' && format_num == 0)
+				flags |= LEADZEROFLAG;
+			format_num *= 10;
+			format_num += c - '0';
+			goto next_format;
+#else
+		case '0'...'9':
+			if (c == '0' && format_num == 0)
+				flags |= LEADZEROFLAG;
+			format_num *= 10;
+			format_num += c - '0';
+			goto next_format;
+#endif // _MSC_VER
             case '.':
                 /* XXX for now eat numeric formatting */
                 goto next_format;

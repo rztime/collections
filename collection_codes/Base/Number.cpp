@@ -262,11 +262,11 @@ Number::operator float() const
     if (isTaggedPointer()) {
         uintptr_t ret = (uintptr_t)this;
         if (ret & 0xFFFFFFFF00000000ULL) { // may be a double value
-            _double d{.dd = static_cast<uint64_t>(ret ^ TAGGED_POINTER_NUMBER_FLAG)};
+            _double d(static_cast<uint64_t>(ret ^ TAGGED_POINTER_NUMBER_FLAG));
             return (float)d.d;
         }
         ret = ((uint64_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1;
-        _float f{.ff = static_cast<uint32_t>(ret)};
+        _float f(static_cast<uint32_t>(ret));
         return f.f;
     }
     D_D(Number);
@@ -277,7 +277,7 @@ Number::operator double() const
 {
     if (isTaggedPointer()) {
         uintptr_t ret = ((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG);
-        _double d{.dd = static_cast<uint64_t>(ret)};
+        _double d(static_cast<uint64_t>(ret));
         return d.d;
     }
     D_D(Number);
@@ -324,7 +324,7 @@ shared_ptr<Number> Number::numberWithValue(unsigned int v)
 
 shared_ptr<Number> Number::numberWithValue(float v)
 {
-    _float f{v};
+    _float f(v);
     uintptr_t ret = f.ff;
     Number * o = reinterpret_cast<Number *>((ret) << 1 | TAGGED_POINTER_NUMBER_FLAG);
     return shared_ptr<Number>(o);
@@ -332,7 +332,7 @@ shared_ptr<Number> Number::numberWithValue(float v)
 
 shared_ptr<Number> Number::numberWithValue(double v)
 {
-    _double d{v};
+    _double d(v);
     return numberWithValue(d.dd);
 }
 

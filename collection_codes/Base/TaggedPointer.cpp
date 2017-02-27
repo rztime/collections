@@ -96,10 +96,29 @@ void printTaggedPointerInfo()
     printf("    initialized data (edata)  %10p\n", &edata);
     printf("    uninitialized data (end)  %10p\n", &end);
 }
+
+#elif defined(_MSC_VER)
+bool is_steady_pointer(const void *p)
+{
+	return 0;
+}
+
+#include <windows.h>
+#include <winnt.h>
+#include <stdlib.h>
+
+void printTaggedPointerInfo()
+{
+}
 #else
 void printTaggedPointerInfo()
 {
-    ;
+	;
+}
+
+bool is_steady_pointer(const void *p)
+{
+	return 0;
 }
 
 #endif // __APPLE__

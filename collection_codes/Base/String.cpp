@@ -425,7 +425,6 @@ shared_ptr<String> String::stringWithUTF8String(const char *nullTerminatedCStrin
     if (!nullTerminatedCString) {
         return nullptr;
     }
-    printf("%p\n", nullTerminatedCString);
     size_t length = strlen(nullTerminatedCString);
     return stringWithBytes(nullTerminatedCString, length);
 }

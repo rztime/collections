@@ -99,15 +99,13 @@ Date Date::dateEpoch()
     return dateWithTimeIntervalSince1970(TimeInterval(0));
 }
 
-#ifdef WIN32
-
+#if defined(_MSC_VER)
 void strptime(const char *buf, const char *format, struct tm *tm)
 {
 	assert(format == FMDB_CPP_DATE_FORMAT, "TODO:");
 	// TODO:
 }
-
-#endif
+#endif // _MSC_VER
 
 Date Date::dateFromString(const string &dateString)
 {
@@ -133,11 +131,11 @@ string Date::stringFromDate(const Date &date)
     time_t time = system_clock::to_time_t(date.d);
     char str[64];
     struct tm tm;
-#ifdef WIN32
+#if defined(_MSC_VER)
     localtime_s(&tm, &time);
 #else
     localtime_r(&time, &tm);
-#endif
+#endif // _MSC_VER
 
     size_t length = strftime(str, sizeof(str), FMDB_CPP_DATE_FORMAT, &tm);
     return string(str, str + length);

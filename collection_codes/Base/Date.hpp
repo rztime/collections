@@ -6,8 +6,8 @@
 //  Copyright © 2017年 CHE. All rights reserved.
 //
 
-#ifndef Date_hpp
-#define Date_hpp
+#ifndef DATE_HPP
+#define DATE_HPP
 
 #include "global.h"
 #include <iosfwd>
@@ -161,4 +161,4 @@ public:
 
 CC_END
 
-#endif /* Date_hpp */
+#endif /* DATE_HPP */

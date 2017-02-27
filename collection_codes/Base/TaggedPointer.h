@@ -38,6 +38,8 @@
 //#define TAGGED_POINTER_ARC_INIT 0x0000004000000000ull
 
 union _float {
+	_float(float v) : f(v) {}
+	_float(uint32_t v) : ff(v) {}
     float f;
     struct {
         uint32_t m : 23; // 小数位
@@ -48,6 +50,8 @@ union _float {
 };
 
 union _double {
+	_double(double v) : d(v) {}
+	_double(uint64_t v) : dd(v) {}
     double d;
     struct {
         uint64_t m : 52; // 小数位

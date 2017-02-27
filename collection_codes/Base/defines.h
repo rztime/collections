@@ -38,8 +38,23 @@ CC_BEGIN
 # define CC_EXTERN extern
 #endif
 
+#if defined(_MSC_VER)
+# ifndef _NOEXCEPT_
+# define _NOEXCEPT_ _NOEXCEPT
+# endif // !_NOEXCEPT_
+
+# ifndef __attribute__
+# define __attribute__(...)
+#endif // !__attribute__
+
+# ifndef __printflike
+#define __printflike(...)
+#endif // !__printflike
+
+#endif // _MSC_VER
+
 #ifndef __PL64__
-# ifdef WIN32
+# if defined(_MSC_VER)
 #  ifdef _WIN64
 #   define __PL64__ 1
 #  else

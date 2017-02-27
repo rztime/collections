@@ -182,6 +182,12 @@ String::String(InputIterator first, InputIterator last)
 #define s(cstr) String::stringWithUTF8String(cstr)
 #endif
 
+static  shared_ptr<String> operator"" ss(const char *cstr, size_t length)
+{
+	return String::stringWithBytes(cstr, length);
+}
+
+
 CC_END
 
 #endif /* STRING_HPP */

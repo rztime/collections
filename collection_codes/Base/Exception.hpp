@@ -11,11 +11,6 @@
 
 #include <stdarg.h>
 #include "Object.hpp"
-#include <memory>
-#include <vector>
-
-using std::shared_ptr;
-using std::vector;
 
 CC_BEGIN
 
@@ -49,7 +44,7 @@ public:
                       ...) throw() __printflike(2, 3);
     static void raise(const  shared_ptr<String> &exceptionName,
                       const char *format,
-                      va_list argList) throw();
+                      va_list argList) _NOEXCEPT(false);
 };
 
 CC_EXTERN const shared_ptr<String> RangeException;

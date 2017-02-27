@@ -6,8 +6,8 @@
 //  Copyright © 2017年 CHE. All rights reserved.
 //
 
-#ifndef iterator_INL
-#define iterator_INL
+#ifndef ITERATOR_INL
+#define ITERATOR_INL
 
 #include "defines.h"
 #include <type_traits>
@@ -100,37 +100,49 @@ public:
 
     reference operator[](difference_type n) const _NOEXCEPT
     { return current[n]; }
-
-    template<typename _Iter1, typename _Iter2>
-    friend bool operator==(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
-    { return x.base() == y.base(); }
-
-    template<typename _Iter1, typename _Iter2>
-    friend bool operator<(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
-    { return x.base() < y.base(); }
-
-    template<typename _Iter1, typename _Iter2>
-    friend bool operator!=(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
-    { return !(x == y); }
-
-    template<typename _Iter1, typename _Iter2>
-    friend bool operator>(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
-    { return y < x; }
-
-    template<typename _Iter1, typename _Iter2>
-    friend bool operator>=(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
-    { return !(x < y); }
-
-    template<typename _Iter1, typename _Iter2>
-    friend bool operator<=(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
-    { return !(y < x); }
-
-    template <class _Iter1, class _Iter2>
-    friend difference_type operator-(const iterator<_Iter1>& __x, const iterator<_Iter2>& __y) _NOEXCEPT
-    {
-        return __x.base() - __y.base();
-    }
 };
+
+template<typename _Iter1, typename _Iter2>
+bool operator==(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
+{
+	return x.base() == y.base();
+}
+
+template<typename _Iter1, typename _Iter2>
+bool operator<(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
+{
+	return x.base() < y.base();
+}
+
+template<typename _Iter1, typename _Iter2>
+bool operator!=(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
+{
+	return !(x == y);
+}
+
+template<typename _Iter1, typename _Iter2>
+bool operator>(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
+{
+	return y < x;
+}
+
+template<typename _Iter1, typename _Iter2>
+bool operator>=(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
+{
+	return !(x < y);
+}
+
+template<typename _Iter1, typename _Iter2>
+bool operator<=(const iterator<_Iter1> &x, const iterator<_Iter2> &y)
+{
+	return !(y < x);
+}
+
+template <class _Iter1, class _Iter2>
+typename iterator<_Iter1>::difference_type operator-(const iterator<_Iter1>& __x, const iterator<_Iter2>& __y) _NOEXCEPT
+{
+	return __x.base() - __y.base();
+}
 
 template <typename _Iter>
 class reverse_iterator {
@@ -214,4 +226,4 @@ inline bool operator<=(const reverse_iterator<_Iter1>& __x, const reverse_iterat
 
 CC_END
 
-#endif /* iterator_INL */
+#endif /* ITERATOR_INL */
