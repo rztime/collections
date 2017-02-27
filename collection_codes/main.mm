@@ -8,35 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
-#include <memory>
+#include "String.hpp"
+#include <iostream>
+#include "TaggedPointer.h"
 
 using namespace std;
-
-class Test : public shared_ptr<Test>, public enable_shared_from_this<Test>
-{
-public:
-    Test()
-    :shared_ptr<Test>(this)
-    {}
-    void print() { printf("11111\n"); }
-protected:
-    void* operator new(size_t s) CA_NORETURN
-    {
-        throw "";
-    }
-};
+using namespace _CC;
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        {
-            Test t;
-            t.print();
-            {
-                Test t1(t);
-                t1.print();
-            }
+        shared_ptr<String> str = s("2235465432");
+        for (auto &s : *str) {
+            printf("%c ", s);
         }
-        printf("3\n");
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
 }

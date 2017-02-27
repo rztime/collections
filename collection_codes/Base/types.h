@@ -17,15 +17,9 @@ using uint64_t = unsigned long long;
 using byte = unsigned char;
 
 #if __PL64__
-using IMP = unsigned long long;
-using uintptr_t = unsigned long;
-
 using integer = long long;
 using uinteger = unsigned long long;
 #else
-using IMP = unsigned int;
-using uintptr_t = unsigned int;
-
 using integer = int;
 using uinteger = unsigned int;
 

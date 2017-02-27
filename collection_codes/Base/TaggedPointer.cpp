@@ -87,7 +87,7 @@ void printTaggedPointerInfo()
 
 #elif defined(__linux__) || defined(__linux) || defined(linux)
 #include <stdlib.h>
-CC_EXTERNchar etext, edata, end;
+CC_EXTERN char etext, edata, end;
 
 void printTaggedPointerInfo()
 {

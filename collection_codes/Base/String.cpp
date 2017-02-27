@@ -76,8 +76,15 @@ String::String(const Data & data)
 {}
 
 String::String(const String &other)
-:Object(new StringPrivate(D_O(String, other).buf))
-{}
+:Object(new StringPrivate)
+{
+    D_D(String);
+    if (other.isTaggedPointer()) {
+        d.buf.append(nullptr, other.length());
+    } else {
+        d.buf = D_O(String, other).buf;
+    }
+}
 
 String::String(String &&other)
 :Object(new StringPrivate(std::move(D_O(String, other).buf)))
@@ -373,12 +380,25 @@ shared_ptr<String> String::stringWithString(const String &other)
 
 shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length)
 {
+    parameterAssert(bytes != nullptr);
+    if (is_steady_pointer(bytes)) { // make a tagged pointer
+        auto str_int = (uintptr_t)bytes << 1 | TAGGED_POINTER_STRING_FLAG;
+        if (length <= TAGGED_POINTER_STRING_MAX_LENGTH) {
+            str_int |= ((length << TAGGED_POINTER_STRING_LENGTH_OFFSET) | TAGGED_POINTER_STRING_LENGTH_FLAG);
+        }
+        return shared_ptr<String>((String *)str_int);
+    }
     return make_shared<String>(bytes, length);
 }
 
 shared_ptr<String> String::stringWithUTF8String(const char *nullTerminatedCString)
 {
-    return make_shared<String>(nullTerminatedCString);
+    if (!nullTerminatedCString) {
+        return nullptr;
+    }
+    printf("%p\n", nullTerminatedCString);
+    size_t length = strlen(nullTerminatedCString);
+    return stringWithBytes(nullTerminatedCString, length);
 }
 
 shared_ptr<String> String::stringWithFormat(const char *format, ...)
@@ -419,6 +439,19 @@ std::ostream& operator<<(std::ostream& os, const String *str)
     }
     return os;
 }
+
+char *String::__get_pointer() _NOEXCEPT
+{
+    D_D(String);
+    return (char *)d.buf.data();
+}
+
+const char *String::__get_pointer() const _NOEXCEPT
+{
+    D_D(String);
+    return d.buf.data();
+}
+
 
 // MutableString
 
@@ -464,7 +497,7 @@ MutableString::MutableString(MutableString &&other)
 :String(std::move(other))
 {}
 
-void MutableString::deleteCharactersInRange(Range range) throw()
+void MutableString::deleteCharactersInRange(Range range) _NOEXCEPT_(false)
 {
     do {
         if (range.maxRange() > length()) {

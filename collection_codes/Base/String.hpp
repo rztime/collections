@@ -11,6 +11,7 @@
 
 #include "Object.hpp"
 #include "Range.hpp"
+#include "Iterator.inl"
 #include <stdarg.h>
 #include <iosfwd>
 
@@ -23,6 +24,14 @@ class MutableString;
 CLASS_TAGGEDPOINTER_AVAILABLE class String : public Object
 {
 public:
+    using iterator = _CC::iterator<char *>;
+    using const_iterator = _CC::iterator<const char *>;
+    using reverse_iterator = _CC::reverse_iterator<iterator>;
+    using const_reverse_iterator = _CC::reverse_iterator<const_iterator>;
+    using pointer = std::string::pointer;
+    using const_pointer = std::string::const_pointer;
+
+public:
     String(const char *s);
     explicit String(const void *bytes, uinteger length);
     explicit String(const string &s);
@@ -32,7 +41,7 @@ public:
     explicit String(String &&other);
 	String();
 	~String() override;
-    
+
     uinteger length() const;
     uinteger  capacity() const;
 
@@ -86,9 +95,43 @@ public:
     static shared_ptr<String> stringWithFormat(const char *format, ...) __printflike__(1, 2);
     static shared_ptr<String> stringWithFormat(const char *format, va_list argList);
 
+    // os
     friend std::ostream& operator<<(std::ostream& os, const String &str);
     friend std::ostream& operator<<(std::ostream& os, const shared_ptr<String> &str);
     friend std::ostream& operator<<(std::ostream& os, const String *str);
+
+    // C++ STL style iterator
+    iterator begin() _NOEXCEPT
+    { return iterator(__get_pointer()); }
+
+    const_iterator begin() const _NOEXCEPT
+    { return const_iterator(__get_pointer()); }
+    const_iterator cbegin() const _NOEXCEPT
+    { return begin(); }
+
+    iterator end() _NOEXCEPT
+    { return iterator(__get_pointer() + length()); }
+    const_iterator end() const _NOEXCEPT
+    { return const_iterator(__get_pointer() + length()); }
+    const_iterator cend() const _NOEXCEPT
+    { return end(); }
+
+    reverse_iterator rbegin() _NOEXCEPT
+    { return reverse_iterator(end()); }
+    const_reverse_iterator rbegin() const _NOEXCEPT
+    { return const_reverse_iterator(end()); }
+    const_reverse_iterator crbegin() const _NOEXCEPT
+    { return rbegin(); }
+
+    reverse_iterator rend() _NOEXCEPT
+    { return reverse_iterator(begin()); }
+    const_reverse_iterator rend() const _NOEXCEPT
+    { return const_reverse_iterator(begin()); }
+    const_reverse_iterator crend() const _NOEXCEPT
+    { return rend(); }
+private:
+    char * __get_pointer() _NOEXCEPT;
+    const char * __get_pointer() const _NOEXCEPT;
 };
 
 class MutableString : public String
@@ -105,7 +148,7 @@ public:
     explicit MutableString(const MutableString &other);
     explicit MutableString(MutableString &&other);
 
-    void deleteCharactersInRange(Range range) throw();
+    void deleteCharactersInRange(Range range) _NOEXCEPT_(false);
 
     MutableString& append(const String &other);
     MutableString& append(const char *format, ...) __printflike__(2,3);

@@ -52,9 +52,9 @@ public:
                       va_list argList) throw();
 };
 
-CC_EXTERN shared_ptr<String> const RangeException;
-CC_EXTERN shared_ptr<String> const InvalidArgumentException;
-CC_EXTERN shared_ptr<String> const OutOfRangeException;
+CC_EXTERN const shared_ptr<String> RangeException;
+CC_EXTERN const shared_ptr<String> InvalidArgumentException;
+CC_EXTERN const shared_ptr<String> OutOfRangeException;
 
 #define throwException(name, format, ...) throw CHException::exceptionWithExceptionName(name, format, ##__VA_ARGS__)
 

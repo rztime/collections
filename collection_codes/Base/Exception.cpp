@@ -19,9 +19,9 @@ using namespace std;
 
 CC_BEGIN
 
-shared_ptr<String> const RangeException = s("RangeException");
-shared_ptr<String> const InvalidArgumentException = s("CHInvalidArgumentException");
-shared_ptr<String> const OutOfRangeException = s("CHOutOfRangeException");
+const shared_ptr<String> RangeException = s("RangeException");
+const shared_ptr<String> InvalidArgumentException = s("InvalidArgumentException");
+const shared_ptr<String> OutOfRangeException = s("OutOfRangeException");
 
 static inline void exceptionHandler()
 {

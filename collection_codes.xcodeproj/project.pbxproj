@@ -11,6 +11,8 @@
 		FB727DB31E63CDFA009342FB /* Object.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB727DB11E63CDFA009342FB /* Object.inl */; };
 		FB727DB51E63CF04009342FB /* assert.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB727DB41E63CF04009342FB /* assert.inl */; };
 		FB727DB81E63CFFC009342FB /* usings.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB727DB71E63CFFC009342FB /* usings.inl */; };
+		FB727DBA1E641068009342FB /* Iterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB727DB91E641068009342FB /* Iterator.inl */; };
+		FB727DBB1E641068009342FB /* Iterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB727DB91E641068009342FB /* Iterator.inl */; };
 		FB8B69DC1E5FD75000127744 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB8B69DB1E5FD75000127744 /* main.mm */; };
 		FB8B69DF1E5FD75000127744 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B69DE1E5FD75000127744 /* AppDelegate.m */; };
 		FB8B69E21E5FD75000127744 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B69E11E5FD75000127744 /* ViewController.m */; };
@@ -76,6 +78,7 @@
 		FB727DB41E63CF04009342FB /* assert.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = assert.inl; sourceTree = "<group>"; };
 		FB727DB61E63CFCA009342FB /* global.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = global.h; sourceTree = "<group>"; };
 		FB727DB71E63CFFC009342FB /* usings.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = usings.inl; sourceTree = "<group>"; };
+		FB727DB91E641068009342FB /* Iterator.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Iterator.inl; sourceTree = "<group>"; };
 		FB8B69D71E5FD75000127744 /* collection_codes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = collection_codes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB8B69DB1E5FD75000127744 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		FB8B69DD1E5FD75000127744 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -277,6 +280,7 @@
 				FB8B6A5B1E60017F00127744 /* Range.hpp */,
 				FB8B6A5C1E60017F00127744 /* String.cpp */,
 				FB8B6A5D1E60017F00127744 /* String.hpp */,
+				FB727DB91E641068009342FB /* Iterator.inl */,
 				FB8B6A701E60023300127744 /* tprintf.cpp */,
 				FB8B6A711E60023300127744 /* tprintf.hpp */,
 				FB8B6A741E60023E00127744 /* Algorithm.cpp */,
@@ -377,6 +381,7 @@
 			files = (
 				FB8B69EA1E5FD75000127744 /* LaunchScreen.storyboard in Resources */,
 				FB8B69E71E5FD75000127744 /* Assets.xcassets in Resources */,
+				FB727DBA1E641068009342FB /* Iterator.inl in Resources */,
 				FB727DB21E63CDFA009342FB /* Object.inl in Resources */,
 				FB8B69E51E5FD75000127744 /* Main.storyboard in Resources */,
 				FB727DB81E63CFFC009342FB /* usings.inl in Resources */,
@@ -389,6 +394,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FB727DB31E63CDFA009342FB /* Object.inl in Resources */,
+				FB727DBB1E641068009342FB /* Iterator.inl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

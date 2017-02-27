@@ -256,12 +256,12 @@ std::ostream& operator<<(std::ostream& os, const shared_ptr<Data> &data)
 
 std::ostream& operator<<(std::ostream& os, const Data *data)
 {
-    if (data) {
+    if (!data) {
         os << "(null)";
     } else {
         auto flags = os.flags();
         os.setf(ios::showbase);
-        os.setf(ios_base::hex, ios_base::basefield);
+        os.setf(ios_base::hex | ios_base::left, ios_base::basefield);
         os << "<";
         size_t length = data->length();
         const unsigned int *p = (const unsigned int *)data->data();

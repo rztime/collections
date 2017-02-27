@@ -265,7 +265,7 @@ Number::operator float() const
             _double d{.dd = static_cast<uint64_t>(ret ^ TAGGED_POINTER_NUMBER_FLAG)};
             return (float)d.d;
         }
-        ret = ((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1;
+        ret = ((uint64_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1;
         _float f{.ff = static_cast<uint32_t>(ret)};
         return f.f;
     }
