@@ -21,7 +21,7 @@ class Data : public Object
 {
 public:
     explicit Data(uinteger capacity = 0);
-    explicit Data(const byte *bytes, uinteger length);
+    explicit Data(const void *bytes, uinteger length);
     explicit Data(const vector<byte> &bytes);
     explicit Data(vector<byte> &&bytes);
     explicit Data(const string &aString);

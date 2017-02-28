@@ -42,10 +42,10 @@ Data::Data(uinteger capacity)
 :Object(new DataPrivate(capacity))
 {}
 
-Data::Data(const byte *bytes, uinteger length)
+Data::Data(const void *bytes, uinteger length)
 :Data(length)
 {
-    append(bytes, length);
+    append((byte *)bytes, length);
 }
 
 Data::Data(const vector<byte> &bytes)

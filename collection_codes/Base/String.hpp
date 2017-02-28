@@ -130,6 +130,8 @@ public:
     { return const_reverse_iterator(begin()); }
     const_reverse_iterator crend() const _NOEXCEPT
     { return rend(); }
+protected:
+    Object *duplicate() const override;
 private:
     char * __get_pointer() _NOEXCEPT;
     const char * __get_pointer() const _NOEXCEPT;
@@ -182,7 +184,7 @@ String::String(InputIterator first, InputIterator last)
 #define s(cstr) String::stringWithUTF8String(cstr)
 #endif
 
-static  shared_ptr<String> operator"" ss(const char *cstr, size_t length)
+__unused static shared_ptr<String> operator""_ss(const char *cstr, size_t length)
 {
 	return String::stringWithBytes(cstr, length);
 }

@@ -27,7 +27,7 @@ const shared_ptr<String> RangeException = s("RangeException");
 const shared_ptr<String> InvalidArgumentException = s("InvalidArgumentException");
 const shared_ptr<String> OutOfRangeException = s("OutOfRangeException");
 
-static inline void exceptionHandler()
+__unused static inline void exceptionHandler()
 {
     exception_ptr ptr = current_exception();
     try {

@@ -41,14 +41,14 @@ public:
     void operator delete(void *obj);
 protected:
     struct ObjectPrivate *_d = 0;
-    Object *duplicate() const;
+    virtual Object *duplicate() const;
     
 };
 
 template<typename T>
 T* Object::copy() const
 {
-    return (T *)duplicate();
+    return static_cast<T *>(duplicate());
 }
 
 CC_END

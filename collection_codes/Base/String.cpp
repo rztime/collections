@@ -150,7 +150,7 @@ shared_ptr<String> String::substring(Range range) const
     if (isTaggedPointer()) {
         auto ptr = (uintptr_t)this;
         const char *str = TAGGED_POINTER_STRING_GET_STRING(ptr);
-        return make_shared<String>(str, str + length());
+        return make_shared<String>(str, length());
     }
 	D_D(String);
 	string substr = d.buf.substr(range.location, range.length);
@@ -257,19 +257,19 @@ shared_ptr<String> String::stringByReplacingOccurrencesOfStringWithString(const 
     auto copy = this->copy<String>();
     do {
         vector<Range> result;
-        D_D(String);
-        auto &targetString = D_O(String, target).buf;
-        searchAllOfOccurrencesOfString(d.buf.data(),
-                                       (uint32_t)d.buf.length(),
-                                       targetString.data(),
+        searchAllOfOccurrencesOfString(begin().base(),
+                                       (uint32_t)length(),
+                                       target.begin().base(),
                                        (uint32_t)target.length(),
                                        result);
         if (result.empty()) {
             break;
         }
         auto &buf = D_O(String, *copy).buf;
+        auto rep = replacement.begin().base();
+        auto repLength = replacement.length();
         for (auto &range : result) {
-            buf.replace(range.location, range.length, D_O(String, replacement).buf);
+            buf.replace(range.location, range.length, rep, repLength);
         }
     } while (0);
     return shared_ptr<String>(copy);
@@ -279,13 +279,14 @@ shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const
 {
     auto copy = this->copy<String>();
     do {
-        D_D(String);
-        if (range.maxRange() > d.buf.length()) {
+        if (range.maxRange() > length()) {
             // TODO: 抛出异常
             break;
         }
+        auto rep = replacement.begin().base();
+        auto repLength = replacement.length();
         auto &buf = D_O(String, *copy).buf;
-        buf.replace(range.location, range.length, D_O(String, replacement).buf);
+        buf.replace(range.location, range.length, rep, repLength);
     } while (0);
     return shared_ptr<String>(copy);
 }
@@ -293,12 +294,12 @@ shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const
 shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const String &separaotr) const
 {
     auto result = make_shared<vector<shared_ptr<String>>>(0);
-    D_D(String);
     vector<Range> ranges;
-    searchAllOfOccurrencesOfString(d.buf.data(),
-                                   (uint32_t)d.buf.length(),
-                                   D_O(String, separaotr).buf.data(),
-                                   (uint32_t)D_O(String, separaotr).buf.length(), ranges);
+    searchAllOfOccurrencesOfString(begin().base(),
+                                   (uint32_t)length(),
+                                   separaotr.begin().base(),
+                                   (uint32_t)separaotr.length(),
+                                   ranges);
     for (auto &range : ranges) {
         result->push_back(this->substring(range));
     }
@@ -307,59 +308,51 @@ shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const
 
 double String::doubleValue() const
 {
-    D_D(String);
-    return std::stod(d.buf);
+    return std::stod(begin().base());
 }
 
 float String::floatValue() const
 {
-    D_D(String);
-    return std::stof(d.buf);
+    return std::stof(begin().base());
 }
 
 int String::intValue() const
 {
-    D_D(String);
-    return std::stoi(d.buf);
+    return std::stoi(begin().base());
 }
 
 long String::longValue() const
 {
-    D_D(String);
-    return std::stol(d.buf);
+    return std::stol(begin().base());
 }
 
 long long String::longLongValue() const
 {
-    D_D(String);
-    return std::stoll(d.buf);
+    return std::stoll(begin().base());
 }
 
 bool String::boolValue() const
 {
-    D_D(String);
-    return std::stod(d.buf);
+    return std::stod(begin().base());
 }
 
 integer String::integerValue() const
 {
-    D_D(String);
     return
 #if __PL64__
-    std::stoll(d.buf);
+    std::stoll(begin().base());
 #else
-    std::stoi(d.buf);
+    std::stoi(begin().base());
 #endif
 }
 
 uinteger String::unsignedIntegerValue() const
 {
-    D_D(String);
     return
 #if __PL64__
-    std::stoull(d.buf);
+    std::stoull(begin().base());
 #else
-    (uint32_t)std::stoi(d.buf);
+    (uint32_t)std::stoi(begin().base());
 #endif
 }
 
@@ -381,24 +374,21 @@ shared_ptr<String> String::lowercaseString() const
 
 shared_ptr<Data> String::dataUsingEncoding() const
 {
-    D_D(String);
-    auto data = make_shared<Data>(d.buf);
+    auto data = make_shared<Data>(begin().base(), length());
     return data;
 }
 
 uinteger String::getBytes(void *buffer, uinteger bufferLength) const
 {
     parameterAssert(buffer != nullptr);
-    D_D(String);
-    uinteger length = std::min(bufferLength, (uinteger)d.buf.length());
-    memcpy(buffer, d.buf.data(), length);
+    uinteger length = std::min(bufferLength, this->length());
+    memcpy(buffer, begin().base(), length);
     return length;
 }
 
 const char& String::operator[](const size_t pos) const
 {
-    D_D(String);
-    return d.buf[pos];
+    return begin()[pos];
 }
 
 // creation
@@ -463,9 +453,20 @@ std::ostream& operator<<(std::ostream& os, const String *str)
     if (!str) {
         os << "(null)";
     } else {
-        os << D_O(String, *str).buf;
+        os << str->begin().base();
     }
     return os;
+}
+
+Object *String::duplicate() const
+{
+    if (isTaggedPointer()) {
+        string str(begin(), end());
+        String *sstr = new String(std::move(str));;
+        return sstr;
+    } else {
+        return Object::duplicate();
+    }
 }
 
 char *String::__get_pointer() _NOEXCEPT
@@ -527,6 +528,7 @@ MutableString::MutableString(MutableString &&other)
 
 void MutableString::deleteCharactersInRange(Range range) _NOEXCEPT_(false)
 {
+    parameterAssert(!isTaggedPointer());
     do {
         if (range.maxRange() > length()) {
             break;
@@ -538,13 +540,15 @@ void MutableString::deleteCharactersInRange(Range range) _NOEXCEPT_(false)
 
 MutableString& MutableString::append(const String &other)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
-    d.buf.append(D_O(MutableString, (const MutableString &)other).buf);
+    d.buf.append(other.begin(), other.end());
     return *this;
 }
 
 MutableString& MutableString::append(const char *format, ...)
 {
+    parameterAssert(!isTaggedPointer());
     va_list ap;
     va_start(ap, format);
     append(format, ap);
@@ -554,60 +558,70 @@ MutableString& MutableString::append(const char *format, ...)
 
 MutableString& MutableString::append(const char *format, va_list argList)
 {
+    parameterAssert(!isTaggedPointer());
     insert(length(), format, argList);
     return *this;
 }
 
 MutableString& MutableString::append(const char *nullTerminatedCString)
 {
+    parameterAssert(!isTaggedPointer());
     insert(nullTerminatedCString, length());
     return *this;
 }
 
 MutableString& MutableString::append(const Data &data)
 {
+    parameterAssert(!isTaggedPointer());
     insert(data, length());
     return *this;
 }
 
 MutableString& MutableString::append(char c)
 {
+    parameterAssert(!isTaggedPointer());
     insert(c, length());
     return *this;
 }
 
 void MutableString::insert(char c, uinteger pos)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
     d.buf.insert(pos, 1, c);
 }
 
 void MutableString::insert(const char *nullTerminatedCString, uinteger pos)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
     d.buf.insert(pos, nullTerminatedCString);
 }
 
 void MutableString::insert(const byte *b, uinteger length, uinteger pos)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
     d.buf.insert(pos, (const char *)b, length);
 }
 
 void MutableString::insert(const Data &data, uinteger pos)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
     d.buf.insert(d.buf.begin() + pos, data.data(), data.data() + data.length());
 }
 
 void MutableString::insert(const String &aString, uinteger pos)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
-    d.buf.insert(pos, D_O(MutableString, (const MutableString &)aString).buf);
+    d.buf.insert(d.buf.begin() + pos, aString.begin(), aString.end());
 }
 
 void MutableString::insert(uinteger pos, const char *format, ...)
 {
+    parameterAssert(!isTaggedPointer());
     va_list ap;
     va_start(ap, format);
     insert(pos, format, ap);
@@ -616,6 +630,7 @@ void MutableString::insert(uinteger pos, const char *format, ...)
 
 void MutableString::insert(uinteger pos, const char *format, va_list argList)
 {
+    parameterAssert(!isTaggedPointer());
     char *buffer = nullptr;
     uint32_t capacity = 0;
     uinteger length = tprintf_c(buffer, &capacity, format, argList, OUTPUT_FLAG_DESCRIPTION);
@@ -626,38 +641,43 @@ void MutableString::insert(uinteger pos, const char *format, va_list argList)
 
 void MutableString::clear()
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
     d.buf.clear();
 }
 
 char& MutableString::operator[](const size_t pos)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(String);
     return d.buf[pos];
 }
 
 void MutableString::replaceOccurrencesOfStringWithString(const String &target, const String &replacement)
 {
+    parameterAssert(!isTaggedPointer());
     vector<Range> result;
     D_D(MutableString);
-    auto &targetString = D_O(MutableString, (const MutableString &)target).buf;
     searchAllOfOccurrencesOfString(d.buf.data(),
                                    (uint32_t)d.buf.length(),
-                                   targetString.data(),
+                                   target.begin().base(),
                                    (uint32_t)target.length(),
                                    result);
+    auto rep = replacement.begin().base();
+    auto repLength = replacement.length();
     for (auto &range : result) {
-        d.buf.replace(range.location, range.length, D_O(MutableString, (const MutableString &)replacement).buf);
+        d.buf.replace(range.location, range.length, rep, repLength);
     }
 }
 
 void MutableString::replaceCharactersInRangeWithString(Range range, const String &aString)
 {
+    parameterAssert(!isTaggedPointer());
     D_D(MutableString);
     if (range.maxRange() > d.buf.length()) {
         // TODO: 抛出异常
     }
-    d.buf.replace(range.location, range.length, D_O(MutableString, (const MutableString &)aString).buf);
+    d.buf.replace(range.location, range.length, aString.begin().base(), aString.length());
 }
 
 CC_END
