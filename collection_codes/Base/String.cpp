@@ -57,6 +57,16 @@ struct StringPrivate : ObjectPrivate
 #define TAGGED_STRING_POINTER_RETURN(obj) reinterpret_cast<const char *>(((uintptr_t)obj ^ TAGGED_POINTER_STRING_FLAG) >> 1)
 #define _make_shared_ptr(c) shared_ptr<String>(c, __deleter__())
 
+static inline char *get_taggepointer_str(uintptr_t ptr)
+{
+    if (TAGGED_POINTER_STRING_HAS_A_LEGNTH(ptr)) {
+        ptr ^= (TAGGED_POINTER_STRING_FLAG | TAGGED_POINTER_STRING_LENGTH_FLAG);
+        ptr &= (~TAGGED_POINTER_STRING_LENGTH_MASK);
+    }
+    auto str = reinterpret_cast<char *>(ptr >> 1);
+    return str;
+}
+
 String::String(const char * s)
 :Object(new StringPrivate(s))
 {}
@@ -116,7 +126,7 @@ uinteger String::length() const
             len = (ptr & TAGGED_POINTER_STRING_LENGTH_MASK) >> TAGGED_POINTER_STRING_LENGTH_OFFSET;
             parameterAssert(len <= TAGGED_POINTER_STRING_MAX_LENGTH);
         } else {
-            const char *str = TAGGED_POINTER_STRING_GET_STRING(ptr);
+            const char *str = get_taggepointer_str((uintptr_t)this);
             len = strlen(str);
         }
         return len;
@@ -148,8 +158,7 @@ shared_ptr<String> String::substringToIndex(uinteger index) const
 shared_ptr<String> String::substring(Range range) const
 {
     if (isTaggedPointer()) {
-        auto ptr = (uintptr_t)this;
-        const char *str = TAGGED_POINTER_STRING_GET_STRING(ptr);
+        const char *str = get_taggepointer_str((uintptr_t)this);
         return make_shared<String>(str, length());
     }
 	D_D(String);
@@ -403,7 +412,8 @@ shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length)
     if (is_steady_pointer(bytes)) { // make a tagged pointer
         auto str_int = (uintptr_t)bytes << 1 | TAGGED_POINTER_STRING_FLAG;
         if (length <= TAGGED_POINTER_STRING_MAX_LENGTH) {
-            str_int |= ((length << TAGGED_POINTER_STRING_LENGTH_OFFSET) | TAGGED_POINTER_STRING_LENGTH_FLAG);
+            length <<= TAGGED_POINTER_STRING_LENGTH_OFFSET;
+            str_int |= (length | TAGGED_POINTER_STRING_LENGTH_FLAG);
         }
         return shared_ptr<String>((String *)str_int, __deleter__());
     }
@@ -471,12 +481,18 @@ Object *String::duplicate() const
 
 char *String::__get_pointer() _NOEXCEPT
 {
+    if (isTaggedPointer()) {
+        return get_taggepointer_str((uintptr_t)this);
+    }
     D_D(String);
     return (char *)d.buf.data();
 }
 
 const char *String::__get_pointer() const _NOEXCEPT
 {
+    if (isTaggedPointer()) {
+        return get_taggepointer_str((uintptr_t)this);
+    }
     D_D(String);
     return d.buf.data();
 }

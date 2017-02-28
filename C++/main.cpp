@@ -13,8 +13,8 @@ using namespace _cc;
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    auto str = s("123534fefer");
-    cout << str->length();
-    std::cout << "Hello, World!\n";
+    auto str = "123534fefer"_s;
+    cout << str << endl;
+    cout << str->length() << endl;
     return 0;
 }

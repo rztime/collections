@@ -184,7 +184,7 @@ String::String(InputIterator first, InputIterator last)
 #define s(cstr) String::stringWithUTF8String(cstr)
 #endif
 
-__unused static shared_ptr<String> operator""_ss(const char *cstr, size_t length)
+__unused static shared_ptr<String> operator""_s(const char *cstr, size_t length)
 {
 	return String::stringWithBytes(cstr, length);
 }
