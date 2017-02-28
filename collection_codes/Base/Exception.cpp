@@ -86,8 +86,7 @@ Exception::Exception(const shared_ptr<String> &exceptionName,
                      const shared_ptr<String> &reason,
                      const shared_ptr<Object> &userInfo)
 :Object(new ExceptionPrivate(exceptionName, reason, userInfo))
-{
-}
+{ }
 
 // creation
 shared_ptr<Exception> Exception::exceptionWithExceptionName(const shared_ptr<String> &exceptionName,
@@ -95,6 +94,13 @@ shared_ptr<Exception> Exception::exceptionWithExceptionName(const shared_ptr<Str
                                                  const shared_ptr<Object> &userInfo)
 {
     return make_shared<Exception>(exceptionName, reason, userInfo);
+}
+
+shared_ptr<String> Exception::description() const
+{
+	D_D(Exception);
+	auto desc = String::stringWithFormat("%p@:%p@ | User info:%p@", d.name, d.reason, d.userInfo);
+	return desc;
 }
 
 shared_ptr<Exception> Exception::exceptionWithExceptionName(const shared_ptr<String> &exceptionName, const char *fmt, ...)

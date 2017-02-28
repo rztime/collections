@@ -20,10 +20,10 @@ class Number;
 class Exception : public Object
 {
 public:
-    Exception(const shared_ptr<String> &exceptionName,
+	explicit Exception(const shared_ptr<String> &exceptionName,
               const shared_ptr<String> &reason,
               const shared_ptr<Object> &userInfo);
-    Exception();
+	explicit Exception();
 
     shared_ptr<String> exceptionName() const;
     shared_ptr<String> reason() const;
@@ -45,13 +45,15 @@ public:
     static void raise(const  shared_ptr<String> &exceptionName,
                       const char *format,
                       va_list argList) _NOEXCEPT(false);
+
+	shared_ptr<String> description() const override;
 };
 
 CC_EXTERN const shared_ptr<String> RangeException;
 CC_EXTERN const shared_ptr<String> InvalidArgumentException;
 CC_EXTERN const shared_ptr<String> OutOfRangeException;
 
-#define throwException(name, format, ...) throw CHException::exceptionWithExceptionName(name, format, ##__VA_ARGS__)
+#define throwException(name, format, ...) throw Exception::exceptionWithExceptionName(name, format, ##__VA_ARGS__)
 
 CC_END
 

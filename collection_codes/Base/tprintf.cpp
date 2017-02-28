@@ -309,25 +309,30 @@ uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_lis
                     *(int *)ptr = (int)chars_written;
                 break;
             case '@':
-//                obj = va_arg(ap, id);
+                obj = va_arg(ap, Object*);
                 if (!obj) {
                     s = "(null)";
                     goto _output_string;
                 }
             {
-//                String *string = (String *)obj;
-//                if (!string->isKindOfClass(String::getClass(nullptr))) {
-//                    string = obj->description();
-//                }
-//                uint32_t length = string->length();
-//                // check rest memory
-//                __realloc(length);
-//                (void) string->getBytes(str, length);
-//                str += length;
-//                chars_written += length;
-//                if (string != obj) {
-//                    string->release();
-//                }
+				String *string = dynamic_cast<String *>(obj);
+				if (string) {
+					uint32_t length = string->length();
+					// check rest memory
+					__realloc(length);
+					(void)string->getBytes(str, length);
+					str += length;
+					chars_written += length;
+				} else {
+					auto shared_string = obj->description();
+					uint32_t length = shared_string->length();
+					// check rest memory
+					__realloc(length);
+					(void)shared_string->getBytes(str, length);
+					str += length;
+					chars_written += length;
+				}
+                
             }
                 break;
             default:

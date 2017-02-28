@@ -11,11 +11,11 @@
 
 CC_BEGIN
 
-std::shared_ptr<String> showRange(Range range)
+shared_ptr<String> Range::description() const
 {
-    auto str = String::stringWithFormat("{.location=%llu, .length=%llu}",
-                                        range.location, range.length);
-    return str;
+	auto str = String::stringWithFormat("{.location=%llu, .length=%llu}",
+		location, length);
+	return str;
 }
 
 CC_END

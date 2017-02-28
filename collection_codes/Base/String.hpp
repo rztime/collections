@@ -39,9 +39,12 @@ public:
     explicit String(const String &other);
     explicit String(String &&other);
     template<class InputIterator>
-    explicit String(InputIterator first, InputIterator last);
+    explicit String(InputIterator first, InputIterator last)
+	:String(string(first, last)){}
 	String();
 	~String() override;
+
+	shared_ptr<String> description() const override;
 
     uinteger length() const;
     uinteger  capacity() const;
@@ -174,11 +177,6 @@ public:
     void replaceOccurrencesOfStringWithString(const String &target, const String &replacement);
     void replaceCharactersInRangeWithString(Range range, const String &aString);
 };
-
-template<class InputIterator>
-String::String(InputIterator first, InputIterator last)
-:String(first, last - first)
-{}
 
 #ifndef s
 #define s(cstr) String::stringWithUTF8String(cstr)

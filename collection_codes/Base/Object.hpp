@@ -33,7 +33,7 @@ public:
 
     // protocol
     virtual bool equalTo(const Object &anObject) const;
-    virtual String *description() const;
+    virtual shared_ptr<String> description() const;
     virtual uint64_t hash_code() const;
 
     // override

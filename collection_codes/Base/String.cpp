@@ -117,6 +117,11 @@ String::~String()
 {
 }
 
+shared_ptr<String> String::description() const
+{
+	return shared_ptr<String>(copy<String>());
+}
+
 uinteger String::length() const
 {
     if (isTaggedPointer()) {

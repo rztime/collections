@@ -48,8 +48,12 @@ CC_BEGIN
 #endif // !__attribute__
 
 # ifndef __printflike
-#define __printflike(...)
-#endif // !__printflike
+# define __printflike(...)
+# endif // !__printflike
+
+# ifndef __unused
+# define __unused
+# endif // !__unused
 
 #endif // _MSC_VER
 

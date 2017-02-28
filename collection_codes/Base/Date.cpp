@@ -13,22 +13,22 @@ CC_BEGIN
 const TimeInterval TimeIntervalSince1970 = TimeInterval(978307200.0);
 const char *const FMDB_CPP_DATE_FORMAT = "%a %b %d %Y %H:%M:%S %z";
 
-Date::Date()
+Date::Date() _NOEXCEPT_
 :d(system_clock::now())
 {
 }
 
-Date::Date(time_point tp)
+Date::Date(time_point tp) _NOEXCEPT_
 :d(tp)
 {
 }
 
-Date::Date(TimeInterval SinceReferenceDate)
+Date::Date(TimeInterval SinceReferenceDate) _NOEXCEPT_
 :d(duration_cast<system_clock::duration>(TimeIntervalSince1970 + SinceReferenceDate))
 {
 }
 
-Date Date::clone()
+Date Date::clone() _NOEXCEPT_
 {
     time_point t;
     Date date(t);
@@ -36,43 +36,43 @@ Date Date::clone()
     return date;
 }
 
-Date::~Date() { }
+Date::~Date() _NOEXCEPT_ { }
 
-TimeInterval Date::timeIntervalSinceDate(Date anotherData) const
+TimeInterval Date::timeIntervalSinceDate(Date anotherData) const _NOEXCEPT_
 {
     return d.time_since_epoch() - anotherData.d.time_since_epoch();
 }
 
-TimeInterval Date::timeIntervalSinceNow() const
+TimeInterval Date::timeIntervalSinceNow() const _NOEXCEPT_
 {
     return d - system_clock::now();
 }
 
-TimeInterval Date::timeIntervalSince1970() const
+TimeInterval Date::timeIntervalSince1970() const _NOEXCEPT_
 {
     return d.time_since_epoch();
 }
 
-TimeInterval Date::timeIntervalSinceReferenceDate() const
+TimeInterval Date::timeIntervalSinceReferenceDate() const _NOEXCEPT_
 {
     return d.time_since_epoch() - TimeIntervalSince1970;
 }
 
-Date Date::dateByAddingTimeInterval(TimeInterval seconds) const
+Date Date::dateByAddingTimeInterval(TimeInterval seconds) const _NOEXCEPT_
 {
     Date date;
     date.d += duration_cast<system_clock::duration>(seconds);
     return date;
 }
 
-Date Date::dateWithTimeIntervalSinceNow(TimeInterval secs)
+Date Date::dateWithTimeIntervalSinceNow(TimeInterval secs) _NOEXCEPT_
 {
     Date date;
     date.d += duration_cast<system_clock::duration>(secs);
     return date;
 }
 
-Date Date::dateWithTimeIntervalSince1970(TimeInterval secs)
+Date Date::dateWithTimeIntervalSince1970(TimeInterval secs) _NOEXCEPT_
 {
     time_point t;
     Date date(t);
@@ -80,7 +80,7 @@ Date Date::dateWithTimeIntervalSince1970(TimeInterval secs)
     return date;
 }
 
-Date Date::dateWithTimeIntervalSinceReferenceDate(TimeInterval ti)
+Date Date::dateWithTimeIntervalSinceReferenceDate(TimeInterval ti) _NOEXCEPT_
 {
     time_point t;
     Date date(t);
@@ -88,26 +88,26 @@ Date Date::dateWithTimeIntervalSinceReferenceDate(TimeInterval ti)
     return date;
 }
 
-Date Date::dateWithTimeInterval(TimeInterval secsToAdded, Date sinceDate)
+Date Date::dateWithTimeInterval(TimeInterval secsToAdded, Date sinceDate) _NOEXCEPT_
 {
     sinceDate.d += duration_cast<system_clock::duration>(secsToAdded);
     return sinceDate;
 }
 
-Date Date::dateEpoch()
+Date Date::dateEpoch() _NOEXCEPT_
 {
     return dateWithTimeIntervalSince1970(TimeInterval(0));
 }
 
 #if defined(_MSC_VER)
-void strptime(const char *buf, const char *format, struct tm *tm)
+void strptime(const char *buf, const char *format, struct tm *tm) _NOEXCEPT_
 {
 	assert(format == FMDB_CPP_DATE_FORMAT, "TODO:");
 	// TODO:
 }
 #endif // _MSC_VER
 
-Date Date::dateFromString(const string &dateString)
+Date Date::dateFromString(const string &dateString) _NOEXCEPT_
 {
     struct tm tm = {0};
     strptime(dateString.c_str(), FMDB_CPP_DATE_FORMAT, &tm);
@@ -126,7 +126,7 @@ Date Date::dateFromString(const string &dateString)
     return date;
 }
 
-string Date::stringFromDate(const Date &date)
+string Date::stringFromDate(const Date &date) _NOEXCEPT_
 {
     time_t time = system_clock::to_time_t(date.d);
     char str[64];
@@ -141,7 +141,7 @@ string Date::stringFromDate(const Date &date)
     return string(str, str + length);
 }
 
-string Date::description() const
+string Date::description() const _NOEXCEPT_
 {
     return Date::stringFromDate(*this);
 }

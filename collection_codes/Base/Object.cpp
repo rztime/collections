@@ -45,7 +45,7 @@ bool Object::equalTo(const Object &anObject) const
     return this == &anObject;
 }
 
-String *Object::description() const
+shared_ptr<String> Object::description() const
 {
     return nullptr;
 }

@@ -34,9 +34,9 @@ typedef struct Range {
     bool locationInRange(uinteger loc)
     { return (!(loc < location) && (loc - location) < length) ? true : false; }
 
-} Range;
+	shared_ptr<String> description() const;
 
-//CC_EXTERN std::shared_ptr<String> showRange(Range range);
+} Range;
 
 CC_END
 
