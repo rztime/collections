@@ -22,74 +22,74 @@ class String;
 CLASS_TAGGEDPOINTER_AVAILABLE class Number : public Object
 {
 public:
-    Number() _NOEXCEPT_;
-    Number(bool v) _NOEXCEPT_;
-    Number(char v) _NOEXCEPT_;
-    Number(unsigned char v) _NOEXCEPT_;
-    Number(short v) _NOEXCEPT_;
-    Number(unsigned short v) _NOEXCEPT_;
-    Number(int v) _NOEXCEPT_;
-    Number(unsigned int v) _NOEXCEPT_;
-    Number(float v) _NOEXCEPT_;
-    Number(double v) _NOEXCEPT_;
-    Number(long v) _NOEXCEPT_;
-    Number(unsigned long v) _NOEXCEPT_;
-    Number(long long v) _NOEXCEPT_;
-    Number(unsigned long long v) _NOEXCEPT_;
+    Number() NOEXCEPT;
+    Number(bool v) NOEXCEPT;
+    Number(char v) NOEXCEPT;
+    Number(unsigned char v) NOEXCEPT;
+    Number(short v) NOEXCEPT;
+    Number(unsigned short v) NOEXCEPT;
+    Number(int v) NOEXCEPT;
+    Number(unsigned int v) NOEXCEPT;
+    Number(float v) NOEXCEPT;
+    Number(double v) NOEXCEPT;
+    Number(long v) NOEXCEPT;
+    Number(unsigned long v) NOEXCEPT;
+    Number(long long v) NOEXCEPT;
+    Number(unsigned long long v) NOEXCEPT;
 
-    operator bool() const _NOEXCEPT_;
-    operator char() const _NOEXCEPT_;
-    operator unsigned char() const _NOEXCEPT_;
-    operator short() const _NOEXCEPT_;
-    operator unsigned short() const _NOEXCEPT_;
-    operator int() const _NOEXCEPT_;
-    operator unsigned int() const _NOEXCEPT_;
-    operator float() const _NOEXCEPT_;
-    operator long() const _NOEXCEPT_;
-    operator unsigned long() const _NOEXCEPT_;
-    operator long long() const  _NOEXCEPT_;
-    operator unsigned long long() const _NOEXCEPT_;
-    operator double() const _NOEXCEPT_;
+    operator bool() const NOEXCEPT;
+    operator char() const NOEXCEPT;
+    operator unsigned char() const NOEXCEPT;
+    operator short() const NOEXCEPT;
+    operator unsigned short() const NOEXCEPT;
+    operator int() const NOEXCEPT;
+    operator unsigned int() const NOEXCEPT;
+    operator float() const NOEXCEPT;
+    operator long() const NOEXCEPT;
+    operator unsigned long() const NOEXCEPT;
+    operator long long() const  NOEXCEPT;
+    operator unsigned long long() const NOEXCEPT;
+    operator double() const NOEXCEPT;
 
-    bool boolValue() const _NOEXCEPT_;
-    char charValue() const _NOEXCEPT_;
-    unsigned char unsignedCharValue() const _NOEXCEPT_;
-    short shortValue() const _NOEXCEPT_;
-    unsigned short unsignedShortValue() const _NOEXCEPT_;
-    int intValue() const _NOEXCEPT_;
-    unsigned int unsignedIntValue() const _NOEXCEPT_;
-    float floatValue() const _NOEXCEPT_;
-    double doubleValue() const _NOEXCEPT_;
-    long longValue() const _NOEXCEPT_;
-    unsigned long unsignedLongValue() const _NOEXCEPT_;
-    long long longLongValue() const _NOEXCEPT_;
-    unsigned long long unsginedLongLongValue() const _NOEXCEPT_;
-    integer integerValue() const _NOEXCEPT_;
-    uinteger unsignedIntegerValue() const _NOEXCEPT_;
+    bool boolValue() const NOEXCEPT;
+    char charValue() const NOEXCEPT;
+    unsigned char unsignedCharValue() const NOEXCEPT;
+    short shortValue() const NOEXCEPT;
+    unsigned short unsignedShortValue() const NOEXCEPT;
+    int intValue() const NOEXCEPT;
+    unsigned int unsignedIntValue() const NOEXCEPT;
+    float floatValue() const NOEXCEPT;
+    double doubleValue() const NOEXCEPT;
+    long longValue() const NOEXCEPT;
+    unsigned long unsignedLongValue() const NOEXCEPT;
+    long long longLongValue() const NOEXCEPT;
+    unsigned long long unsginedLongLongValue() const NOEXCEPT;
+    integer integerValue() const NOEXCEPT;
+    uinteger unsignedIntegerValue() const NOEXCEPT;
 
-    static shared_ptr<Number> numberWithValue(bool v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(char v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(unsigned char v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(short v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(unsigned short v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(int v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(unsigned int v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(float v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(double v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(long v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(unsigned long v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(long long v) _NOEXCEPT_;
-    static shared_ptr<Number> numberWithValue(unsigned long long v) _NOEXCEPT_;
+    static shared_ptr<Number> numberWithValue(bool v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(char v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(unsigned char v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(short v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(unsigned short v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(int v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(unsigned int v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(float v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(double v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(long v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(unsigned long v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(long long v) NOEXCEPT;
+    static shared_ptr<Number> numberWithValue(unsigned long long v) NOEXCEPT;
 };
 
 #define number(v) numberWithValue(v)
 
-__unused static shared_ptr<Number> operator""_sn(unsigned long long num)  _NOEXCEPT_
+__unused static shared_ptr<Number> operator""_sn(unsigned long long num)  NOEXCEPT
 {
 	return Number::numberWithValue(num);
 }
 
-__unused static shared_ptr<Number> operator""_sn(long double num)  _NOEXCEPT_
+__unused static shared_ptr<Number> operator""_sn(long double num)  NOEXCEPT
 {
 	return Number::numberWithValue((double)num);
 }

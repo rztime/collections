@@ -15,7 +15,7 @@ CC_BEGIN
 
 struct ObjectPrivate
 {
-    virtual ~ObjectPrivate()  _NOEXCEPT_ {}
+    virtual ~ObjectPrivate()  NOEXCEPT {}
     virtual ObjectPrivate *duplicate() const { return nullptr; }
 };
 

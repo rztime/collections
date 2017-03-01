@@ -27,16 +27,16 @@ struct NumberPrivate : public ObjectPrivate
         bool boolValue;
     } internal = {0};
 
-    NumberPrivate(float v)  _NOEXCEPT_ { internal.floatValue = v; }
+    NumberPrivate(float v)  NOEXCEPT { internal.floatValue = v; }
 
-    NumberPrivate(double v)  _NOEXCEPT_ { internal.doubleValue = v; }
+    NumberPrivate(double v)  NOEXCEPT { internal.doubleValue = v; }
 
     template<typename T>
-    NumberPrivate(T v)  _NOEXCEPT_ { internal.longLongValue = (long long)v; }
+    NumberPrivate(T v)  NOEXCEPT { internal.longLongValue = (long long)v; }
 
-    NumberPrivate()  _NOEXCEPT_ {}
+    NumberPrivate()  NOEXCEPT {}
 
-    NumberPrivate* duplicate() const _NOEXCEPT_ override
+    NumberPrivate* duplicate() const NOEXCEPT override
     {
         auto copy = new NumberPrivate;
         copy->internal = internal;
@@ -44,141 +44,141 @@ struct NumberPrivate : public ObjectPrivate
     }
 };
 
-Number::Number()  _NOEXCEPT_
+Number::Number()  NOEXCEPT
 :Object()
 {
 }
 
-Number::Number(bool v) _NOEXCEPT_
+Number::Number(bool v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(char v) _NOEXCEPT_
+Number::Number(char v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(unsigned char v) _NOEXCEPT_
+Number::Number(unsigned char v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(short v) _NOEXCEPT_
+Number::Number(short v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(unsigned short v) _NOEXCEPT_
+Number::Number(unsigned short v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(int v) _NOEXCEPT_
+Number::Number(int v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(unsigned int v) _NOEXCEPT_
+Number::Number(unsigned int v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(float v) _NOEXCEPT_
+Number::Number(float v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(double v) _NOEXCEPT_
+Number::Number(double v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(long v) _NOEXCEPT_
+Number::Number(long v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(unsigned long v) _NOEXCEPT_
+Number::Number(unsigned long v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(long long v) _NOEXCEPT_
+Number::Number(long long v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
-Number::Number(unsigned long long v) _NOEXCEPT_
+Number::Number(unsigned long long v) NOEXCEPT
 :Object(new NumberPrivate(v))
 {}
 
 
-bool Number::boolValue() const _NOEXCEPT_
+bool Number::boolValue() const NOEXCEPT
 {
     return (bool)*this;
 }
 
-char Number::charValue() const _NOEXCEPT_
+char Number::charValue() const NOEXCEPT
 {
     return (char)*this;
 }
 
-unsigned char Number::unsignedCharValue() const _NOEXCEPT_
+unsigned char Number::unsignedCharValue() const NOEXCEPT
 {
     return (unsigned char)*this;
 }
 
-short Number::shortValue() const _NOEXCEPT_
+short Number::shortValue() const NOEXCEPT
 {
     return (short)*this;
 }
 
-unsigned short Number::unsignedShortValue() const _NOEXCEPT_
+unsigned short Number::unsignedShortValue() const NOEXCEPT
 {
     return (unsigned short)*this;
 }
 
-int Number::intValue() const _NOEXCEPT_
+int Number::intValue() const NOEXCEPT
 {
     return (int)*this;
 }
 
-unsigned int Number::unsignedIntValue() const _NOEXCEPT_
+unsigned int Number::unsignedIntValue() const NOEXCEPT
 {
     return (unsigned int)*this;
 }
 
-float Number::floatValue() const _NOEXCEPT_
+float Number::floatValue() const NOEXCEPT
 {
     return (float)*this;
 }
 
-double Number::doubleValue() const _NOEXCEPT_
+double Number::doubleValue() const NOEXCEPT
 {
     return (double)*this;
 }
 
-long Number::longValue() const _NOEXCEPT_
+long Number::longValue() const NOEXCEPT
 {
     return (long)*this;
 }
 
-unsigned long Number::unsignedLongValue() const _NOEXCEPT_
+unsigned long Number::unsignedLongValue() const NOEXCEPT
 {
     return (unsigned long)*this;
 }
 
-long long Number::longLongValue() const _NOEXCEPT_
+long long Number::longLongValue() const NOEXCEPT
 {
     return (long long)*this;
 }
 
-unsigned long long Number::unsginedLongLongValue() const _NOEXCEPT_
+unsigned long long Number::unsginedLongLongValue() const NOEXCEPT
 {
     return (unsigned long long)*this;
 }
 
-integer Number::integerValue() const _NOEXCEPT_
+integer Number::integerValue() const NOEXCEPT
 {
     return (integer)*this;
 }
 
-uinteger Number::unsignedIntegerValue() const _NOEXCEPT_
+uinteger Number::unsignedIntegerValue() const NOEXCEPT
 {
     return (uinteger)*this;
 }
 
 
-Number::operator bool() const _NOEXCEPT_
+Number::operator bool() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         return (bool)(((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1);
@@ -187,7 +187,7 @@ Number::operator bool() const _NOEXCEPT_
     return d.internal.boolValue;
 }
 
-Number::operator unsigned char() const _NOEXCEPT_
+Number::operator unsigned char() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         return (unsigned char)(((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1);
@@ -196,12 +196,12 @@ Number::operator unsigned char() const _NOEXCEPT_
     return d.internal.charValue;
 }
 
-Number::operator char() const _NOEXCEPT_
+Number::operator char() const NOEXCEPT
 {
     return this->operator unsigned char();
 }
 
-Number::operator unsigned short() const _NOEXCEPT_
+Number::operator unsigned short() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         return (unsigned short)(((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1);
@@ -210,12 +210,12 @@ Number::operator unsigned short() const _NOEXCEPT_
     return d.internal.shortValue;
 }
 
-Number::operator short() const _NOEXCEPT_
+Number::operator short() const NOEXCEPT
 {
     return this->operator unsigned short();
 }
 
-Number::operator unsigned int() const _NOEXCEPT_
+Number::operator unsigned int() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         return (unsigned int)(((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1);
@@ -224,12 +224,12 @@ Number::operator unsigned int() const _NOEXCEPT_
     return d.internal.intValue;
 }
 
-Number::operator int() const _NOEXCEPT_
+Number::operator int() const NOEXCEPT
 {
     return this->operator unsigned int();
 }
 
-Number::operator unsigned long() const _NOEXCEPT_
+Number::operator unsigned long() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         return (unsigned long)this->operator unsigned long long();
@@ -238,12 +238,12 @@ Number::operator unsigned long() const _NOEXCEPT_
     return d.internal.longValue;
 }
 
-Number::operator long() const _NOEXCEPT_
+Number::operator long() const NOEXCEPT
 {
     return this->operator unsigned long();
 }
 
-Number::operator unsigned long long() const _NOEXCEPT_
+Number::operator unsigned long long() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         return (unsigned long long)(((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG) >> 1);
@@ -252,12 +252,12 @@ Number::operator unsigned long long() const _NOEXCEPT_
     return d.internal.longLongValue;
 }
 
-Number::operator long long() const _NOEXCEPT_
+Number::operator long long() const NOEXCEPT
 {
     return this->operator unsigned long long();
 }
 
-Number::operator float() const _NOEXCEPT_
+Number::operator float() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         uintptr_t ret = (uintptr_t)this;
@@ -273,7 +273,7 @@ Number::operator float() const _NOEXCEPT_
     return d.internal.floatValue;
 }
 
-Number::operator double() const _NOEXCEPT_
+Number::operator double() const NOEXCEPT
 {
     if (isTaggedPointer()) {
         uintptr_t ret = ((uintptr_t)this ^ TAGGED_POINTER_NUMBER_FLAG);
@@ -286,43 +286,43 @@ Number::operator double() const _NOEXCEPT_
 
 
 
-shared_ptr<Number> Number::numberWithValue(bool v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(bool v) NOEXCEPT
 {
     return numberWithValue((unsigned int)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(char v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(char v) NOEXCEPT
 {
     return numberWithValue((unsigned int)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(unsigned char v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(unsigned char v) NOEXCEPT
 {
     return numberWithValue((unsigned int)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(short v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(short v) NOEXCEPT
 {
     return numberWithValue((unsigned int)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(unsigned short v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(unsigned short v) NOEXCEPT
 {
     return numberWithValue((unsigned int)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(int v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(int v) NOEXCEPT
 {
     return numberWithValue((unsigned int)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(unsigned int v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(unsigned int v) NOEXCEPT
 {
     Number *o = reinterpret_cast<Number *>(((uintptr_t)v) << 1 | TAGGED_POINTER_NUMBER_FLAG);
     return shared_ptr<Number>(o, __deleter__());
 }
 
-shared_ptr<Number> Number::numberWithValue(float v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(float v) NOEXCEPT
 {
     _float f(v);
     uintptr_t ret = f.ff;
@@ -330,18 +330,18 @@ shared_ptr<Number> Number::numberWithValue(float v) _NOEXCEPT_
     return shared_ptr<Number>(o, __deleter__());
 }
 
-shared_ptr<Number> Number::numberWithValue(double v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(double v) NOEXCEPT
 {
     _double d(v);
     return numberWithValue(d.dd);
 }
 
-shared_ptr<Number> Number::numberWithValue(long v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(long v) NOEXCEPT
 {
     return numberWithValue((unsigned long)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(unsigned long v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(unsigned long v) NOEXCEPT
 {
     if (v & MAX_INDICATE_NUMBER) {
         return std::make_shared<Number>(v);
@@ -350,12 +350,12 @@ shared_ptr<Number> Number::numberWithValue(unsigned long v) _NOEXCEPT_
     return std::shared_ptr<Number>(o, __deleter__());
 }
 
-shared_ptr<Number> Number::numberWithValue(long long v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(long long v) NOEXCEPT
 {
     return numberWithValue((unsigned long long)v);
 }
 
-shared_ptr<Number> Number::numberWithValue(unsigned long long v) _NOEXCEPT_
+shared_ptr<Number> Number::numberWithValue(unsigned long long v) NOEXCEPT
 {
     if (v & MAX_INDICATE_NUMBER) {
         return std::make_shared<Number>(v);

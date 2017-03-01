@@ -38,10 +38,11 @@ CC_BEGIN
 # define CC_EXTERN extern
 #endif
 
+# ifndef NOEXCEPT
+# define NOEXCEPT noexcept
+# endif // !NOEXCEPT
+
 #if defined(_MSC_VER)
-# ifndef _NOEXCEPT_
-# define _NOEXCEPT_ _NOEXCEPT
-# endif // !_NOEXCEPT_
 
 # ifndef __attribute__
 # define __attribute__(...)

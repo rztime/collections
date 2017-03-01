@@ -147,7 +147,7 @@ uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_lis
     outBuffer = str;
     size_t len = ALLOC_SIZE;
 
-    auto __realloc = [&](uint32_t lengthOfWillWrite){
+    auto __realloc = [&](uinteger lengthOfWillWrite){
         if (chars_written + lengthOfWillWrite > len) {
             len  = chars_written + lengthOfWillWrite;
             outBuffer = (char *)realloc(outBuffer, len);
@@ -317,7 +317,7 @@ uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_lis
             {
 				String *string = dynamic_cast<String *>(obj);
 				if (string) {
-					uint32_t length = string->length();
+					uinteger length = string->length();
 					// check rest memory
 					__realloc(length);
 					(void)string->getBytes(str, length);
@@ -325,7 +325,7 @@ uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_lis
 					chars_written += length;
 				} else {
 					auto shared_string = obj->description();
-					uint32_t length = shared_string->length();
+					uinteger length = shared_string->length();
 					// check rest memory
 					__realloc(length);
 					(void)shared_string->getBytes(str, length);

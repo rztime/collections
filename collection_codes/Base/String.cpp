@@ -9,10 +9,11 @@
 #include "String.hpp"
 #include "String.inl"
 #include "Object.inl"
+#include "Data.hpp"
 #include "tprintf.hpp"
 #include "Algorithm.hpp"
+#include "Exception.hpp"
 #include "TaggedPointer.h"
-#include "Data.hpp"
 #include <ostream>
 #include <stdlib.h>
 #include <string.h>
@@ -67,27 +68,27 @@ static inline char *get_taggepointer_str(uintptr_t ptr)
     return str;
 }
 
-String::String(const char * s)
+String::String(const char * s)  _NOEXCEPT
 :Object(new StringPrivate(s))
 {}
 
-String::String(const void *bytes, uinteger length)
+String::String(const void *bytes, uinteger length)  _NOEXCEPT
 :Object(new StringPrivate(bytes, length))
 {}
 
-String::String(const string & s)
+String::String(const string & s)  _NOEXCEPT
 :Object(new StringPrivate(s))
 {}
 
-String::String(string && s)
+String::String(string && s) _NOEXCEPT
 :Object(new StringPrivate(std::move(s)))
 {}
 
-String::String(const Data & data)
+String::String(const Data & data) _NOEXCEPT
 :Object(new StringPrivate(data))
 {}
 
-String::String(const String &other)
+String::String(const String &other) _NOEXCEPT
 :Object(new StringPrivate)
 {
     D_D(String);
@@ -98,7 +99,7 @@ String::String(const String &other)
     }
 }
 
-String::String(String &&other)
+String::String(String &&other) _NOEXCEPT
 :Object(new StringPrivate)
 {
     D_D(String);
@@ -109,20 +110,20 @@ String::String(String &&other)
     }
 }
 
-String::String()
+String::String() _NOEXCEPT
 :Object(new StringPrivate)
 {}
 
-String::~String()
+String::~String() _NOEXCEPT
 {
 }
 
-shared_ptr<String> String::description() const
+shared_ptr<String> String::description() const _NOEXCEPT
 {
 	return shared_ptr<String>(copy<String>());
 }
 
-uinteger String::length() const
+uinteger String::length() const _NOEXCEPT
 {
     if (isTaggedPointer()) {
         uintptr_t ptr = (uintptr_t)this;
@@ -140,7 +141,7 @@ uinteger String::length() const
 	return d.buf.size();
 }
 
-uinteger String::capacity() const
+uinteger String::capacity() const _NOEXCEPT
 {
     if (isTaggedPointer()) {
         return length();
@@ -149,18 +150,18 @@ uinteger String::capacity() const
 	return d.buf.capacity();
 }
 
-shared_ptr<String> String::substringFromIndex(uinteger index) const
+shared_ptr<String> String::substringFromIndex(uinteger index) const _NOEXCEPT
 {
 	D_D(String);
 	return substring(Range(index, d.buf.size() - index));
 }
 
-shared_ptr<String> String::substringToIndex(uinteger index) const
+shared_ptr<String> String::substringToIndex(uinteger index) const _NOEXCEPT
 {
 	return substring(Range(0, index));
 }
 
-shared_ptr<String> String::substring(Range range) const
+shared_ptr<String> String::substring(Range range) const _NOEXCEPT
 {
     if (isTaggedPointer()) {
         const char *str = get_taggepointer_str((uintptr_t)this);
@@ -171,7 +172,7 @@ shared_ptr<String> String::substring(Range range) const
 	return shared_ptr<String>(new String(std::move(substr)));
 }
 
-bool String::compare(const String & aString) const
+bool String::compare(const String & aString) const _NOEXCEPT
 {
     if (aString.length() != length()) {
         return false;
@@ -185,7 +186,7 @@ bool String::compare(const String & aString) const
     return iter_s_this == iter_e;
 }
 
-bool String::caseInsensitiveCompare(const String & aString) const
+bool String::caseInsensitiveCompare(const String & aString) const _NOEXCEPT
 {
     string s1(begin(), end());
     string s2(aString.begin(), aString.end());
@@ -194,12 +195,12 @@ bool String::caseInsensitiveCompare(const String & aString) const
 	return s1 == s1;
 }
 
-bool String::isEqualToString(const String & aString) const
+bool String::isEqualToString(const String & aString) const _NOEXCEPT
 {
 	return compare(aString);
 }
 
-bool String::hasPrefix(const String & str) const
+bool String::hasPrefix(const String & str) const _NOEXCEPT
 {
     if (this->length() < str.length()) {
         return false;
@@ -213,7 +214,7 @@ bool String::hasPrefix(const String & str) const
 	return b2 == e;
 }
 
-bool String::hasSuffix(const String & str) const
+bool String::hasSuffix(const String & str) const _NOEXCEPT
 {
     if (this->length() < str.length()) {
         return false;
@@ -227,26 +228,26 @@ bool String::hasSuffix(const String & str) const
 	return b2 == e;
 }
 
-bool String::containsString(const String &aString) const
+bool String::containsString(const String &aString) const _NOEXCEPT
 {
     return rangeOfString(aString).location != NotFound;
 }
 
-Range String::rangeOfString(const String &aString) const
+Range String::rangeOfString(const String &aString) const _NOEXCEPT
 {
     auto s1 = this->begin().base();
     auto s2 = aString.begin().base();
     return BMContainsString(s1, (uint32_t)length(), s2, (uint32_t)aString.length());
 }
 
-shared_ptr<String> String::stringByAppendingString(const String &aString) const
+shared_ptr<String> String::stringByAppendingString(const String &aString) const _NOEXCEPT
 {
     auto copy = this->copy<String>();
     D_O(String, *copy).buf += D_O(String, aString).buf;
     return shared_ptr<String>(copy);
 }
 
-shared_ptr<String> String::stringByAppendingFormat(const char *format, ...) const
+shared_ptr<String> String::stringByAppendingFormat(const char *format, ...) const _NOEXCEPT
 {
     auto copy = this->copy<String>();
     do {
@@ -266,7 +267,7 @@ shared_ptr<String> String::stringByAppendingFormat(const char *format, ...) cons
     return shared_ptr<String>(copy);
 }
 
-shared_ptr<String> String::stringByReplacingOccurrencesOfStringWithString(const String &target, const String &replacement) const
+shared_ptr<String> String::stringByReplacingOccurrencesOfStringWithString(const String &target, const String &replacement) const _NOEXCEPT
 {
     auto copy = this->copy<String>();
     do {
@@ -289,7 +290,7 @@ shared_ptr<String> String::stringByReplacingOccurrencesOfStringWithString(const 
     return shared_ptr<String>(copy);
 }
 
-shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const String &replacement) const
+shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const String &replacement) const _NOEXCEPT
 {
     auto copy = this->copy<String>();
     do {
@@ -305,7 +306,7 @@ shared_ptr<String> String::stringByReplacingCharactersInRange(Range range, const
     return shared_ptr<String>(copy);
 }
 
-shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const String &separaotr) const
+shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const String &separaotr) const _NOEXCEPT
 {
     auto result = make_shared<vector<shared_ptr<String>>>(0);
     vector<Range> ranges;
@@ -320,37 +321,37 @@ shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const
     return result;
 }
 
-double String::doubleValue() const
+double String::doubleValue() const _NOEXCEPT
 {
     return std::stod(begin().base());
 }
 
-float String::floatValue() const
+float String::floatValue() const _NOEXCEPT
 {
     return std::stof(begin().base());
 }
 
-int String::intValue() const
+int String::intValue() const _NOEXCEPT
 {
     return std::stoi(begin().base());
 }
 
-long String::longValue() const
+long String::longValue() const _NOEXCEPT
 {
     return std::stol(begin().base());
 }
 
-long long String::longLongValue() const
+long long String::longLongValue() const _NOEXCEPT
 {
     return std::stoll(begin().base());
 }
 
-bool String::boolValue() const
+bool String::boolValue() const _NOEXCEPT
 {
     return std::stod(begin().base());
 }
 
-integer String::integerValue() const
+integer String::integerValue() const _NOEXCEPT
 {
     return
 #if __PL64__
@@ -360,7 +361,7 @@ integer String::integerValue() const
 #endif
 }
 
-uinteger String::unsignedIntegerValue() const
+uinteger String::unsignedIntegerValue() const _NOEXCEPT
 {
     return
 #if __PL64__
@@ -370,7 +371,7 @@ uinteger String::unsignedIntegerValue() const
 #endif
 }
 
-shared_ptr<String> String::uppercaseString() const
+shared_ptr<String> String::uppercaseString() const _NOEXCEPT
 {
     auto copy = this->copy<String>();
     auto &s = D_O(String, *copy).buf;
@@ -378,7 +379,7 @@ shared_ptr<String> String::uppercaseString() const
     return shared_ptr<String>(copy);
 }
 
-shared_ptr<String> String::lowercaseString() const
+shared_ptr<String> String::lowercaseString() const _NOEXCEPT
 {
     auto copy = this->copy<String>();
     auto &s = D_O(String, *copy).buf;
@@ -386,13 +387,13 @@ shared_ptr<String> String::lowercaseString() const
     return shared_ptr<String>(copy);
 }
 
-shared_ptr<Data> String::dataUsingEncoding() const
+shared_ptr<Data> String::dataUsingEncoding() const _NOEXCEPT
 {
     auto data = make_shared<Data>(begin().base(), length());
     return data;
 }
 
-uinteger String::getBytes(void *buffer, uinteger bufferLength) const
+uinteger String::getBytes(void *buffer, uinteger bufferLength) const _NOEXCEPT
 {
     parameterAssert(buffer != nullptr);
     uinteger length = std::min(bufferLength, this->length());
@@ -400,18 +401,21 @@ uinteger String::getBytes(void *buffer, uinteger bufferLength) const
     return length;
 }
 
-const char& String::operator[](const size_t pos) const
+const char& String::operator[](const uinteger idx) const _NOEXCEPT(false)
 {
-    return begin()[pos];
+    if (idx >= length()) {
+        throwException(RangeException, "Parameter:idx(%llu) should not greater than string's length(%llu)", idx, this->length());
+    }
+    return begin()[idx];
 }
 
 // creation
-shared_ptr<String> String::stringWithString(const String &other)
+shared_ptr<String> String::stringWithString(const String &other) _NOEXCEPT
 {
     return shared_ptr<String>(other.copy<String>());
 }
 
-shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length)
+shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length) _NOEXCEPT
 {
     parameterAssert(bytes != nullptr);
     if (is_steady_pointer(bytes)) { // make a tagged pointer
@@ -425,7 +429,7 @@ shared_ptr<String> String::stringWithBytes(const void *bytes, uinteger length)
     return make_shared<String>(bytes, length);
 }
 
-shared_ptr<String> String::stringWithUTF8String(const char *nullTerminatedCString)
+shared_ptr<String> String::stringWithUTF8String(const char *nullTerminatedCString) _NOEXCEPT
 {
     if (!nullTerminatedCString) {
         return nullptr;
@@ -434,7 +438,7 @@ shared_ptr<String> String::stringWithUTF8String(const char *nullTerminatedCStrin
     return stringWithBytes(nullTerminatedCString, length);
 }
 
-shared_ptr<String> String::stringWithFormat(const char *format, ...)
+shared_ptr<String> String::stringWithFormat(const char *format, ...) _NOEXCEPT
 {
     va_list ap;
     va_start(ap, format);
@@ -443,7 +447,7 @@ shared_ptr<String> String::stringWithFormat(const char *format, ...)
     return str;
 }
 
-shared_ptr<String> String::stringWithFormat(const char *format, va_list argList)
+shared_ptr<String> String::stringWithFormat(const char *format, va_list argList) _NOEXCEPT
 {
     char *buffer = nullptr;
     uint32_t capacity = 0;
@@ -453,17 +457,17 @@ shared_ptr<String> String::stringWithFormat(const char *format, va_list argList)
     return str;
 }
 
-std::ostream& operator<<(std::ostream& os, const String &str)
+std::ostream& operator<<(std::ostream& os, const String &str) _NOEXCEPT
 {
     return os << &str;
 }
 
-std::ostream& operator<<(std::ostream& os, const shared_ptr<String> &str)
+std::ostream& operator<<(std::ostream& os, const shared_ptr<String> &str) _NOEXCEPT
 {
     return os << str.get();
 }
 
-std::ostream& operator<<(std::ostream& os, const String *str)
+std::ostream& operator<<(std::ostream& os, const String *str) _NOEXCEPT
 {
     if (!str) {
         os << "(null)";
@@ -473,7 +477,7 @@ std::ostream& operator<<(std::ostream& os, const String *str)
     return os;
 }
 
-Object *String::duplicate() const
+Object *String::duplicate() const _NOEXCEPT
 {
     if (isTaggedPointer()) {
         string str(begin(), end());
@@ -547,7 +551,7 @@ MutableString::MutableString(MutableString &&other)
 :String(std::move(other))
 {}
 
-void MutableString::deleteCharactersInRange(Range range) _NOEXCEPT_(false)
+void MutableString::deleteCharactersInRange(Range range) NOEXCEPT(false)
 {
     parameterAssert(!isTaggedPointer());
     do {
