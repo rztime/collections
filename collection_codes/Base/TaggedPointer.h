@@ -10,6 +10,8 @@
 #define TaggedPointer_h
 
 #include <stdint.h>
+#include "_float.inl"
+#include "_double.inl"
 
 #define TAG_MASK 0x8000000000000001ull
 #define ISTAGGEDPOINTER() (uintptr_t)this & TAG_MASK
@@ -35,30 +37,6 @@
 //#define TAGGED_POINTER_ARC_FLAG 0xB000000000000000ull
 //#define is_arc(obj) is_typeTaggedPointer(obj, TAGGED_POINTER_ARC_FLAG)
 //#define TAGGED_POINTER_ARC_INIT 0x0000004000000000ull
-
-union _float {
-	_float(float v) : f(v) {}
-	_float(uint32_t v) : ff(v) {}
-    float f;
-    struct {
-        uint32_t m : 23; // 小数位
-        uint32_t e :  8; // 指数位
-        uint32_t S :  1; // 符号位
-    } s;
-    uint32_t ff;
-};
-
-union _double {
-	_double(double v) : d(v) {}
-	_double(uint64_t v) : dd(v) {}
-    double d;
-    struct {
-        uint64_t m : 52; // 小数位
-        uint64_t e : 11; // 指数位
-        uint64_t S :  1; // 符号位
-    } s;
-    uint64_t dd;
-};
 
 extern void printTaggedPointerInfo();
 

@@ -20,7 +20,7 @@ typedef struct Range {
     uinteger location;
     uinteger length;
 
-    Range(uinteger loc = 0, uinteger len = 0)
+    explicit Range(uinteger loc = 0, uinteger len = 0)
     :location(loc),
     length(len)
     {}
@@ -35,6 +35,8 @@ typedef struct Range {
     { return (!(loc < location) && (loc - location) < length) ? true : false; }
 
 	shared_ptr<String> description() const;
+
+    void clear() { location = 0; length = 0; }
 
 } Range;
 

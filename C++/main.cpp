@@ -13,8 +13,10 @@ using namespace _cc;
 using namespace std;
 
 int main(int argc, const char * argv[]) {
-    auto str = "123534fefer"_s;
-    cout << str << endl;
-    cout << str->length() << endl;
+    auto str = "abc53535353cb"_s;
+    auto val = str->componentsSeparatedByString(*"53"_s);
+    for (auto &s : *val) {
+        cout << s << endl;
+    }
     return 0;
 }

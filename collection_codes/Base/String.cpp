@@ -120,6 +120,9 @@ String::~String() _NOEXCEPT
 
 shared_ptr<String> String::description() const _NOEXCEPT
 {
+    if (isTaggedPointer()) {
+        return shared_ptr<String>((String *)this, __deleter__());
+    }
 	return shared_ptr<String>(copy<String>());
 }
 
@@ -152,8 +155,7 @@ uinteger String::capacity() const _NOEXCEPT
 
 shared_ptr<String> String::substringFromIndex(uinteger index) const _NOEXCEPT
 {
-	D_D(String);
-	return substring(Range(index, d.buf.size() - index));
+	return substring(Range(index, length() - index));
 }
 
 shared_ptr<String> String::substringToIndex(uinteger index) const _NOEXCEPT
@@ -165,39 +167,49 @@ shared_ptr<String> String::substring(Range range) const _NOEXCEPT
 {
     if (isTaggedPointer()) {
         const char *str = get_taggepointer_str((uintptr_t)this);
-        return make_shared<String>(str, length());
+        return String::stringWithBytes(str + range.location, range.length);
     }
 	D_D(String);
 	string substr = d.buf.substr(range.location, range.length);
 	return shared_ptr<String>(new String(std::move(substr)));
 }
 
-bool String::compare(const String & aString) const _NOEXCEPT
+ComparisonResult String::compare(const String & aString) const _NOEXCEPT
 {
-    if (aString.length() != length()) {
-        return false;
-    }
     auto iter_s_this = this->begin();
+    auto iter_e_this = this->end();
     auto iter_s_other = aString.begin();
-    auto iter_e = this->end();
-    while (*iter_s_this++ == *iter_s_other++ && iter_s_other != iter_e) {
+    while (*iter_s_this++ == *iter_s_other++ && iter_s_other != iter_e_this) {
         continue;
     }
-    return iter_s_this == iter_e;
+    if (iter_s_this == iter_e_this) {
+        return ComparisonResult::Same;
+    }
+    if (iter_s_other == aString.end()) {
+        return ComparisonResult::Descending;
+    }
+
+    if (*iter_s_this > *iter_s_other) {
+        return ComparisonResult::Descending;
+    } else {
+        return ComparisonResult::Ascending;
+    }
 }
 
-bool String::caseInsensitiveCompare(const String & aString) const _NOEXCEPT
+ComparisonResult String::caseInsensitiveCompare(const String & aString) const _NOEXCEPT
 {
     string s1(begin(), end());
     string s2(aString.begin(), aString.end());
     std::transform(s1.begin(), s1.end(), s1.begin(), ::toupper);
     std::transform(s2.begin(), s2.end(), s2.begin(), ::toupper);
-	return s1 == s1;
+    String str1(std::move(s1));
+    String str2(std::move(s2));
+	return str1.compare(str2);
 }
 
 bool String::isEqualToString(const String & aString) const _NOEXCEPT
 {
-	return compare(aString);
+    return compare(aString) == ComparisonResult::Same;
 }
 
 bool String::hasPrefix(const String & str) const _NOEXCEPT
@@ -315,8 +327,25 @@ shared_ptr<vector<shared_ptr<String>>> String::componentsSeparatedByString(const
                                    separaotr.begin().base(),
                                    (uint32_t)separaotr.length(),
                                    ranges);
-    for (auto &range : ranges) {
-        result->push_back(this->substring(range));
+    if (!ranges.empty()) {
+        uinteger offset = 0;
+        Range spiltRange;
+        for (auto &range : ranges) {
+            if (offset == range.location) {
+                offset = range.maxRange();
+                continue;
+            }
+            spiltRange.location = offset;
+            spiltRange.length = range.location - spiltRange.location;
+            result->push_back(this->substring(spiltRange));
+            offset = range.maxRange();
+        }
+        uinteger len = length();
+        if (offset < len) {
+            spiltRange.location = offset;
+            spiltRange.length = len - offset;
+            result->push_back(this->substring(spiltRange));
+        }
     }
     return result;
 }
@@ -472,7 +501,7 @@ std::ostream& operator<<(std::ostream& os, const String *str) _NOEXCEPT
     if (!str) {
         os << "(null)";
     } else {
-        os << str->begin().base();
+        os.write(str->begin().base(), str->length());
     }
     return os;
 }

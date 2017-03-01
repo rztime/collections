@@ -29,6 +29,12 @@
 		FB727DD31E6444AE009342FB /* Algorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FB8B6A741E60023E00127744 /* Algorithm.cpp */; };
 		FB727DD51E644C5B009342FB /* String.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB727DD41E644C5B009342FB /* String.inl */; };
 		FB727DD61E644C5B009342FB /* String.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB727DD41E644C5B009342FB /* String.inl */; };
+		FB75F8A81E66790000051FA7 /* _float.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB75F8A71E66790000051FA7 /* _float.inl */; };
+		FB75F8A91E66790000051FA7 /* _float.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB75F8A71E66790000051FA7 /* _float.inl */; };
+		FB75F8AB1E66791800051FA7 /* _double.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB75F8AA1E66791800051FA7 /* _double.inl */; };
+		FB75F8AC1E66791800051FA7 /* _double.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB75F8AA1E66791800051FA7 /* _double.inl */; };
+		FB75F8AE1E66CCD100051FA7 /* ComparisonResult.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB75F8AD1E66CCD100051FA7 /* ComparisonResult.inl */; };
+		FB75F8AF1E66CCD100051FA7 /* ComparisonResult.inl in Resources */ = {isa = PBXBuildFile; fileRef = FB75F8AD1E66CCD100051FA7 /* ComparisonResult.inl */; };
 		FB8B69DC1E5FD75000127744 /* main.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB8B69DB1E5FD75000127744 /* main.mm */; };
 		FB8B69DF1E5FD75000127744 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B69DE1E5FD75000127744 /* AppDelegate.m */; };
 		FB8B69E21E5FD75000127744 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB8B69E11E5FD75000127744 /* ViewController.m */; };
@@ -110,6 +116,9 @@
 		FB727DC01E644462009342FB /* C++ */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "C++"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB727DC21E644462009342FB /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		FB727DD41E644C5B009342FB /* String.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = String.inl; sourceTree = "<group>"; };
+		FB75F8A71E66790000051FA7 /* _float.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = _float.inl; sourceTree = "<group>"; };
+		FB75F8AA1E66791800051FA7 /* _double.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = _double.inl; sourceTree = "<group>"; };
+		FB75F8AD1E66CCD100051FA7 /* ComparisonResult.inl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ComparisonResult.inl; sourceTree = "<group>"; };
 		FB8B69D71E5FD75000127744 /* collection_codes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = collection_codes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB8B69DB1E5FD75000127744 /* main.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = main.mm; sourceTree = "<group>"; };
 		FB8B69DD1E5FD75000127744 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -339,6 +348,9 @@
 				FB727DB71E63CFFC009342FB /* usings.inl */,
 				FB8B6A371E5FDA3800127744 /* defines.h */,
 				FB8B6A781E60045300127744 /* types.h */,
+				FB75F8A71E66790000051FA7 /* _float.inl */,
+				FB75F8AA1E66791800051FA7 /* _double.inl */,
+				FB75F8AD1E66CCD100051FA7 /* ComparisonResult.inl */,
 			);
 			name = Base;
 			path = collection_codes/Base;
@@ -451,14 +463,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB75F8AB1E66791800051FA7 /* _double.inl in Resources */,
 				FB8B69EA1E5FD75000127744 /* LaunchScreen.storyboard in Resources */,
 				FB8B69E71E5FD75000127744 /* Assets.xcassets in Resources */,
 				FB727DD51E644C5B009342FB /* String.inl in Resources */,
+				FB75F8AE1E66CCD100051FA7 /* ComparisonResult.inl in Resources */,
 				FB727DBA1E641068009342FB /* Iterator.inl in Resources */,
 				FB727DB21E63CDFA009342FB /* Object.inl in Resources */,
 				FB8B69E51E5FD75000127744 /* Main.storyboard in Resources */,
 				FB727DB81E63CFFC009342FB /* usings.inl in Resources */,
 				FB727DB51E63CF04009342FB /* assert.inl in Resources */,
+				FB75F8A81E66790000051FA7 /* _float.inl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -466,8 +481,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FB75F8AC1E66791800051FA7 /* _double.inl in Resources */,
+				FB75F8A91E66790000051FA7 /* _float.inl in Resources */,
 				FB727DD61E644C5B009342FB /* String.inl in Resources */,
 				FB727DB31E63CDFA009342FB /* Object.inl in Resources */,
+				FB75F8AF1E66CCD100051FA7 /* ComparisonResult.inl in Resources */,
 				FB727DBB1E641068009342FB /* Iterator.inl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

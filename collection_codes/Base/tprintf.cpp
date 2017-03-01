@@ -85,6 +85,7 @@ static char *tlonglong_to_string(char *buf, unsigned long long n, int len, uint 
         buf[--pos] = '+';
     return &buf[pos];
 }
+
 static char *tlonglong_to_hexstring(char *buf, unsigned long long u, int len, uint flag)
 {
     int pos = len;
@@ -315,7 +316,10 @@ uinteger tprintf_c(char *&outBuffer, uint32_t *capacity, const char *fmt, va_lis
                     goto _output_string;
                 }
             {
-				String *string = dynamic_cast<String *>(obj);
+                String *string = nullptr;
+                if (!obj->isTaggedPointer()) {
+                    string = dynamic_cast<String *>(obj);
+                }
 				if (string) {
 					uinteger length = string->length();
 					// check rest memory

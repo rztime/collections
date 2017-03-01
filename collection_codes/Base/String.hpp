@@ -12,6 +12,7 @@
 #include "Object.hpp"
 #include "Range.hpp"
 #include "Iterator.inl"
+#include "ComparisonResult.inl"
 #include <stdarg.h>
 #include <iosfwd>
 
@@ -54,8 +55,8 @@ public:
     shared_ptr<String> substringToIndex(uinteger  index) const _NOEXCEPT;
     shared_ptr<String> substring(Range range) const _NOEXCEPT;
 
-    bool compare(const String &aString) const _NOEXCEPT;
-    bool caseInsensitiveCompare(const String &aString) const _NOEXCEPT;
+    ComparisonResult compare(const String &aString) const _NOEXCEPT;
+    ComparisonResult caseInsensitiveCompare(const String &aString) const _NOEXCEPT;
     bool isEqualToString(const String &aString) const _NOEXCEPT;
 
     bool hasPrefix(const String &str) const _NOEXCEPT;
